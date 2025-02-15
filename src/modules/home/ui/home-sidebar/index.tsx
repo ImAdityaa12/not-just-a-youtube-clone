@@ -5,7 +5,7 @@ import SidebarPersonalSection from "./sidebar-personal-items";
 export const HomeSidebar = () => {
   return (
     <Sidebar className="top-16 z-40 border-none">
-      <SidebarContent className="">
+      <SidebarContent>
         <SidebarMainSection />
         <Separator />
         <SidebarPersonalSection />

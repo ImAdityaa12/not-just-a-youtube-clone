@@ -8,9 +8,9 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     <SidebarProvider>
       <div className="w-full">
         <HomeNavbar />
-        <div className="flex pt-16">
+        <div className="flex">
           <HomeSidebar />
-          <div>{children}</div>
+          <div className="pt-16">{children}</div>
         </div>
       </div>
     </SidebarProvider>
