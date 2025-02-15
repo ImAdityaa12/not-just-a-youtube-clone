@@ -7,10 +7,14 @@ import {
   SidebarMenuButton,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@clerk/clerk-react";
+import { useClerk } from "@clerk/nextjs";
 import { HistoryIcon, ListVideoIcon, ThumbsUpIcon } from "lucide-react";
 import Link from "next/link";
 
 const SidebarPersonalSection = () => {
+  const { isSignedIn } = useAuth();
+  const clerk = useClerk();
   const items = [
     {
       title: "History",
@@ -19,7 +23,7 @@ const SidebarPersonalSection = () => {
       auth: true,
     },
     {
-      title: "Subscriptions",
+      title: "Liked videos",
       url: "/playlist/liked",
       icon: ThumbsUpIcon,
       auth: true,
@@ -42,7 +46,12 @@ const SidebarPersonalSection = () => {
                 tooltip={item.title}
                 asChild
                 isActive={false}
-                onClick={() => {}}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (item.auth && !isSignedIn) {
+                    return clerk.openSignIn();
+                  }
+                }}
               >
                 <Link href={item.url} className="flex items-center gap-4">
                   <item.icon />
