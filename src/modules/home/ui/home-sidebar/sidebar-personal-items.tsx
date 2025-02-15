@@ -1,31 +1,38 @@
 "use client";
-import { HomeIcon, PlaySquareIcon, FlameIcon } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
 } from "@/components/ui/sidebar";
+import {
+  FlameIcon,
+  HistoryIcon,
+  ListVideoIcon,
+  ThumbsUpIcon,
+} from "lucide-react";
 import Link from "next/link";
 
-const SidebarMainSection = () => {
+const SidebarPersonalSection = () => {
   const items = [
     {
-      title: "Home",
-      url: "/",
-      icon: HomeIcon,
-    },
-    {
-      title: "Subscriptions",
-      url: "/feed/subscriptions",
-      icon: PlaySquareIcon,
+      title: "History",
+      url: "/playlist/history",
+      icon: HistoryIcon,
       auth: true,
     },
     {
-      title: "Trending",
-      url: "/feed/trending",
-      icon: FlameIcon,
+      title: "Subscriptions",
+      url: "/playlist/liked",
+      icon: ThumbsUpIcon,
+      auth: true,
+    },
+    {
+      title: "All playlists",
+      url: "/playlists",
+      icon: ListVideoIcon,
+      auth: true,
     },
   ];
   return (
@@ -55,4 +62,4 @@ const SidebarMainSection = () => {
   );
 };
 
-export default SidebarMainSection;
+export default SidebarPersonalSection;
