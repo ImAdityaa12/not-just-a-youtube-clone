@@ -1,0 +1,58 @@
+"use client";
+import { HomeIcon, PlaySquareIcon, FlameIcon } from "lucide-react";
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import Link from "next/link";
+
+const SidebarMainSection = () => {
+  const items = [
+    {
+      title: "Home",
+      url: "/",
+      icon: HomeIcon,
+    },
+    {
+      title: "Subscriptions",
+      url: "/feed/subscriptions",
+      icon: PlaySquareIcon,
+      auth: true,
+    },
+    {
+      title: "Trending",
+      url: "/feed/trending",
+      icon: FlameIcon,
+    },
+  ];
+  return (
+    <SidebarGroup>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {items.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton title={item.title}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  asChild
+                  isActive={false}
+                  onClick={() => {}}
+                >
+                  <Link href={item.url}>
+                    <item.icon />
+                    {item.title}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+};
+
+export default SidebarMainSection;
