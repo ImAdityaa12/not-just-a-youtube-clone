@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import SidebarPersonalSection from "./sidebar-personal-items";
 export const HomeSidebar = () => {
   return (
-    <Sidebar className="top-16 z-40 border-none">
+    <Sidebar className="top-16 z-40 border-none" collapsible="icon">
       <SidebarContent>
         <SidebarMainSection />
         <Separator />

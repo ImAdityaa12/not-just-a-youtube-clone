@@ -38,18 +38,16 @@ const SidebarPersonalSection = () => {
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton title={item.title}>
-                <SidebarMenuButton
-                  tooltip={item.title}
-                  asChild
-                  isActive={false}
-                  onClick={() => {}}
-                >
-                  <Link href={item.url} className="flex items-center gap-4">
-                    <item.icon />
-                    <span className="text-sm">{item.title}</span>
-                  </Link>
-                </SidebarMenuButton>
+              <SidebarMenuButton
+                tooltip={item.title}
+                asChild
+                isActive={false}
+                onClick={() => {}}
+              >
+                <Link href={item.url} className="flex items-center gap-4">
+                  <item.icon />
+                  <span className="text-sm">{item.title}</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
