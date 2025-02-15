@@ -6,12 +6,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import {
-  FlameIcon,
-  HistoryIcon,
-  ListVideoIcon,
-  ThumbsUpIcon,
-} from "lucide-react";
+import { HistoryIcon, ListVideoIcon, ThumbsUpIcon } from "lucide-react";
 import Link from "next/link";
 
 const SidebarPersonalSection = () => {
