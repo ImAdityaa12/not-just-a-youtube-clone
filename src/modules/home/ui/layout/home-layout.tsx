@@ -1,7 +1,7 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
-import HomeNavbar from "./home-navbar/home-navbar";
-import { HomeSidebar } from "./home-sidebar";
+import HomeNavbar from "../home-navbar/home-navbar";
+import { HomeSidebar } from "../home-sidebar";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
