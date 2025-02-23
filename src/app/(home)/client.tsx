@@ -3,8 +3,8 @@ import React from "react";
 import { trpc } from "@/trpc/client";
 
 const PageClient = () => {
-  const [data] = trpc.hello.useSuspenseQuery({ text: "Aditya" });
-  return <div>Page Client {data.greeting}</div>;
+  const [data] = trpc.categories.getMany.useSuspenseQuery();
+  return <div>Page Client {JSON.stringify(data, null, 2)}</div>;
 };
 
 export default PageClient;

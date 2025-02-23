@@ -4,9 +4,7 @@ import PageClient from "./client";
 import { ErrorBoundary } from "react-error-boundary";
 
 const page = async () => {
-  void trpc.hello.prefetch({
-    text: "Aditya",
-  });
+  void trpc.categories.getMany.prefetch();
   return (
     <HydrateClient>
       <Suspense fallback={<div>Loading...</div>}>
