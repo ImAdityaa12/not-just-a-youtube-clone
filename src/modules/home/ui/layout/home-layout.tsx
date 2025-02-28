@@ -8,9 +8,9 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     <SidebarProvider>
       <div className="w-full">
         <HomeNavbar />
-        <div className="flex">
+        <div className="flex overflow-hidden">
           <HomeSidebar />
-          <div className="pt-16">{children}</div>
+          <div className="pt-16 w-full">{children}</div>
         </div>
       </div>
     </SidebarProvider>
