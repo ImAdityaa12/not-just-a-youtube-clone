@@ -13,9 +13,12 @@ export const CategoriesSection = ({ categoryId }: CategoriesSectionProps) => {
   return (
     <Suspense
       fallback={
-        <div>
-          <div>Loading...</div>
-        </div>
+        <FilterCarousel
+          isLoading={true}
+          value={categoryId}
+          data={[]}
+          onSelect={() => {}}
+        />
       }
     >
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
@@ -32,9 +35,10 @@ const CategoriesSectionSuspense = ({ categoryId }: CategoriesSectionProps) => {
       label: name,
     };
   });
+  const onSelect = () => {};
   return (
     <div className="w-full overflow-hidden">
-      <FilterCarousel value={categoryId} data={data} />
+      <FilterCarousel value={categoryId} data={data} onSelect={onSelect} />
     </div>
   );
 };
