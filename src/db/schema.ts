@@ -21,6 +21,10 @@ export const usersTable = pgTable(
   (t) => [uniqueIndex("clerk_id_idx").on(t.clerkId)]
 );
 
+export const usersRelations = relations(usersTable, ({ many }) => ({
+  videos: many(videos),
+}));
+
 export const categories = pgTable(
   "categories",
   {
