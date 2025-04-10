@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import React from "react";
 
-const HomeNavbarSearch = () => {
+const StudioNavbarSearch = () => {
   return (
     <form className="flex w-full max-w-[600px]">
       <div className="relative w-full">
@@ -21,4 +21,4 @@ const HomeNavbarSearch = () => {
   );
 };
 
-export default HomeNavbarSearch;
+export default StudioNavbarSearch;
