@@ -10,7 +10,6 @@ interface Pageprops {
 export const dynamic = "force-dynamic";
 const page = async ({ searchParams }: Pageprops) => {
   const { categoryId } = await searchParams;
-  console.log(categoryId);
   void trpc.categories.getMany.prefetch();
   return (
     <HydrateClient>
