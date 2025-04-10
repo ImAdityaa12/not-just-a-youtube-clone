@@ -1,5 +1,12 @@
-"use client"
-import { Sidebar, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+"use client";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 import Link from "next/link";
 import { LogOutIcon, VideoIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -15,26 +22,26 @@ export const StudioSidebar = () => {
           <SidebarMenu>
             <StudioSidebarHeader />
             <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathName==="/studio"} tooltip={"Exit Studio"} asChild>
-                  <Link href={"/studios/videos"} className="flex items-center">
-                  <VideoIcon className="mr-2 size-5"/>
-                    <span className="text-sm">
-                      Content
-                    </span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <Separator />
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip={"Exit Studio"} asChild>
-                  <Link href={"/"} className="flex items-center">
-                  <LogOutIcon className="mr-2" size={5}/>
-                      <span className="text-sm">
-                        Exit Studio
-                      </span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <SidebarMenuButton
+                isActive={pathName === "/studio"}
+                tooltip={"Exit Studio"}
+                asChild
+              >
+                <Link href={"/studios/videos"} className="flex items-center">
+                  <VideoIcon className="mr-2 size-5" />
+                  <span className="text-sm">Content</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <Separator />
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip={"Exit Studio"} asChild>
+                <Link href={"/"} className="flex items-center">
+                  <LogOutIcon className="mr-2" size={5} />
+                  <span className="text-sm">Exit Studio</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
