@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/nextjs";
 import { useClerk } from "@clerk/nextjs";
 import { HistoryIcon, ListVideoIcon, ThumbsUpIcon } from "lucide-react";
 import Link from "next/link";
@@ -46,8 +46,7 @@ const SidebarPersonalSection = () => {
                 tooltip={item.title}
                 asChild
                 isActive={false}
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={() => {
                   if (item.auth && !isSignedIn) {
                     return clerk.openSignIn();
                   }
