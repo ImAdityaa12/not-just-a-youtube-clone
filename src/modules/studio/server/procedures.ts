@@ -15,7 +15,7 @@ export const studioRouter = createTRPCRouter({
     const { id: userId } = ctx.user;
     const data = await db.select().from(videos).where(
       and(
-        eq(videos.userId, userId), // Changed from videos.id to videos.userId
+        eq(videos.userId, userId),
         cursor ? 
           or(
             lt(videos.updatedAt, cursor.updatedAt),
