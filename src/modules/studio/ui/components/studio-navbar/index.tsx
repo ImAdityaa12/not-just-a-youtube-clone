@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import AuthButton from "@/modules/auth/ui/components/auth-button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import StudioUploadModal from "@/modules/auth/ui/studio-upload-modal";
+import StudioUploadModal from "@/modules/studio/ui/components/studio-navbar/studio-upload-modal";
 
 const StudioNavbar = () => {
   return (
