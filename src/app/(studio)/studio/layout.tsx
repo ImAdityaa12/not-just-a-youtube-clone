@@ -1,4 +1,4 @@
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 import StudioLayout from "@/modules/studio/ui/layouts/studio-sidebar";
 import React from "react";
 

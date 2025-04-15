@@ -3,13 +3,18 @@ import { Button } from "@/components/ui/button";
 import { trpc } from "@/trpc/client";
 import { PlusIcon } from "lucide-react";
 import React from "react";
+import { toast } from "sonner";
 
 const StudioUploadModal = () => {
   const utils = trpc.useUtils();
   const create = trpc.videos.create.useMutation({
     onSuccess: () => {
       utils.studio.getMany.invalidate();
+      toast.success("Video created");
     },
+    onError: () => {
+     toast.error("Something went wrong"); 
+    }
   });
   return (
     <Button variant={"secondary"}
