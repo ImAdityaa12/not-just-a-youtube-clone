@@ -1,5 +1,6 @@
 "use client";
 
+import InfiniteScroll from '@/components/infinite-scroll';
 import { LIMIT } from '@/constant';
 import { trpc } from '@/trpc/client';
 import React, { Suspense } from 'react'
@@ -16,15 +17,21 @@ const VideosSection = () => {
 }
 
 const VideosSectionSuspense = () => {
- const [data] = trpc.studio.getMany.useSuspenseInfiniteQuery({
+ const [data, query] = trpc.studio.getMany.useSuspenseInfiniteQuery({
     limit: LIMIT,
  }, {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
  });
   return (
-    <div>{
-        JSON.stringify(data)
-    }</div>
+   <div>
+      {JSON.stringify(data)}
+      <InfiniteScroll 
+         hasNextPage={query.hasNextPage}
+         isFetchingNextPage={query.isFetchingNextPage}
+         fetchNextPage={query.fetchNextPage}
+         isManual
+      />
+   </div>
   )
 }
 
