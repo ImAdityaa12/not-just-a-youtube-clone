@@ -1,5 +1,5 @@
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { Button } from './ui/button';
 
 interface InfiniteScrollProps {
@@ -9,7 +9,7 @@ interface InfiniteScrollProps {
     fetchNextPage: () => void;
 }
 
-const InfiniteScroll= ({
+const InfiniteScroll = ({
     isManual = false,
     hasNextPage,
     isFetchingNextPage,
@@ -18,37 +18,36 @@ const InfiniteScroll= ({
     const { targetRef, isIntersecting } = useIntersectionObserver({
         threshold: 0.5,
         rootMargin: '100px',
-    })
+    });
 
-    useEffect(()=> {
+    useEffect(() => {
         if (isIntersecting && hasNextPage && !isFetchingNextPage && !isManual) {
-            fetchNextPage()    
+            fetchNextPage();
         }
-    }, [isIntersecting, hasNextPage, isFetchingNextPage, fetchNextPage, isManual])
+    }, [
+        isIntersecting,
+        hasNextPage,
+        isFetchingNextPage,
+        fetchNextPage,
+        isManual,
+    ]);
 
-  return (
-    <div className='flex flex-col items-center gap-4 p-4'>
-        <div 
-            ref={targetRef}
-            className='h1'
-        />
-        {
-            hasNextPage ? (
+    return (
+        <div className="flex flex-col items-center gap-4 p-4">
+            <div ref={targetRef} className="h1" />
+            {hasNextPage ? (
                 <Button
-                    variant='secondary'
+                    variant="secondary"
                     disabled={!hasNextPage || isFetchingNextPage}
-                    onClick={()=> fetchNextPage()}
+                    onClick={() => fetchNextPage()}
                 >
-                    {
-                        isFetchingNextPage ? 'Loading...' : 'Load More'
-                    }
+                    {isFetchingNextPage ? 'Loading...' : 'Load More'}
                 </Button>
             ) : (
                 <div>You have reached the end</div>
-            )
-        }
-    </div>
-  )
-}
+            )}
+        </div>
+    );
+};
 
-export default  InfiniteScroll;
+export default InfiniteScroll;
