@@ -47,12 +47,12 @@ export const protectedProcedure = t.procedure.use(async function isAuthed({
             code: 'UNAUTHORIZED',
         });
     }
-    const { success } = await ratelimit.limit(user.id);
-    if (!success) {
-        throw new TRPCError({
-            code: 'TOO_MANY_REQUESTS',
-        });
-    }
+    // const { success } = await ratelimit.limit(user.id);
+    // if (!success) {
+    //     throw new TRPCError({
+    //         code: 'TOO_MANY_REQUESTS',
+    //     });
+    // }
     return next({
         ctx: {
             ...ctx,
