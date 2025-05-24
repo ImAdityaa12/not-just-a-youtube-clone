@@ -5,6 +5,7 @@ import { trpc } from '@/trpc/client';
 import { PlusIcon } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
+import StudioUploader from '../studio-uploader';
 
 const StudioUploadModal = () => {
     const utils = trpc.useUtils();
@@ -19,6 +20,13 @@ const StudioUploadModal = () => {
     });
     return (
         <>
+            <ResponsiveDialog
+                onOpenChange={() => {}}
+                open={!!create.data?.url}
+                title="Testing"
+            >
+                <StudioUploader endpoint="" onSuccess={() => {}} />
+            </ResponsiveDialog>
             <Button
                 variant={'secondary'}
                 onClick={() => create.mutate()}
