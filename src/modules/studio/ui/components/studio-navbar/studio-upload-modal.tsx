@@ -1,4 +1,5 @@
 'use client';
+import ResponsiveDialog from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/trpc/client';
 import { PlusIcon } from 'lucide-react';
@@ -17,18 +18,20 @@ const StudioUploadModal = () => {
         },
     });
     return (
-        <Button
-            variant={'secondary'}
-            onClick={() => create.mutate()}
-            disabled={create.isPending}
-        >
-            {create.isPending ? (
-                <span className="w-4 h-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] mr-1"></span>
-            ) : (
-                <PlusIcon />
-            )}
-            Create
-        </Button>
+        <>
+            <Button
+                variant={'secondary'}
+                onClick={() => create.mutate()}
+                disabled={create.isPending}
+            >
+                {create.isPending ? (
+                    <span className="w-4 h-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] mr-1"></span>
+                ) : (
+                    <PlusIcon />
+                )}
+                Create
+            </Button>
+        </>
     );
 };
 

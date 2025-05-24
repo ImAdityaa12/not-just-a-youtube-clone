@@ -1,7 +1,7 @@
 import React from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Drawer, DrawerContent, DrawerHeader } from './ui/drawer';
-import { Dialog } from './ui/dialog';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from './ui/drawer';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 
 interface ResponsiveDialogProps {
     children: React.ReactNode;
@@ -17,11 +17,14 @@ const ResponsiveDialog = ({
     onOpenChange,
 }: ResponsiveDialogProps) => {
     const isMobile = useIsMobile();
+
     if (isMobile) {
         return (
             <Drawer open={open} onOpenChange={onOpenChange}>
                 <DrawerContent>
-                    <DrawerHeader>{title}</DrawerHeader>
+                    <DrawerHeader>
+                        <DrawerTitle>{title}</DrawerTitle>
+                    </DrawerHeader>
                     {children}
                 </DrawerContent>
             </Drawer>
@@ -29,10 +32,12 @@ const ResponsiveDialog = ({
     } else {
         return (
             <Dialog open={open} onOpenChange={onOpenChange}>
-                <DrawerContent>
-                    <DrawerHeader>{title}</DrawerHeader>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{title}</DialogTitle>
+                    </DialogHeader>
                     {children}
-                </DrawerContent>
+                </DialogContent>
             </Dialog>
         );
     }
