@@ -25,7 +25,12 @@ const StudioUploadModal = () => {
                 open={!!create.data?.url}
                 title="Testing"
             >
-                <StudioUploader endpoint="" onSuccess={() => {}} />
+                <StudioUploader
+                    endpoint={create.data?.url || ''}
+                    onSuccess={() => {
+                        console.log('success');
+                    }}
+                />
             </ResponsiveDialog>
             <Button
                 variant={'secondary'}
