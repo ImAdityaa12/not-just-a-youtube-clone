@@ -23,13 +23,11 @@ const StudioUploadModal = () => {
             <ResponsiveDialog
                 onOpenChange={() => {}}
                 open={!!create.data?.url}
-                title="Testing"
+                title="Upload Video"
             >
                 <StudioUploader
                     endpoint={create.data?.url || ''}
-                    onSuccess={() => {
-                        console.log('success');
-                    }}
+                    onSuccess={() => {}}
                 />
             </ResponsiveDialog>
             <Button
