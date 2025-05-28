@@ -21,7 +21,9 @@ const StudioUploadModal = () => {
     return (
         <>
             <ResponsiveDialog
-                onOpenChange={() => {}}
+                onOpenChange={() => {
+                    create.reset();
+                }}
                 open={!!create.data?.url}
                 title="Upload Video"
             >
