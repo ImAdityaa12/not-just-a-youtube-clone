@@ -27,7 +27,6 @@ export const POST = async (request: Request) => {
     const muxSignature = headersPayload.get('mux-signature');
 
     if (!muxSignature) {
-        console.log('No mux signature found');
         return new Response('No mux signature found', {
             status: 400,
         });
@@ -49,7 +48,6 @@ export const POST = async (request: Request) => {
             const data = payload.data as VideoAssetCreatedWebhookEvent['data'];
 
             if (!data) {
-                console.log('No data found video.asset.created');
                 return new Response('No data found', {
                     status: 400,
                 });
@@ -66,27 +64,22 @@ export const POST = async (request: Request) => {
         case 'video.asset.ready': {
             const data = payload.data as VideoAssetCreatedWebhookEvent['data'];
             if (!data) {
-                console.log('No data found video.asset.ready');
                 return new Response('No data found', {
                     status: 400,
                 });
             }
             if (!data.playback_ids) {
-                console.log('No playback ids found video.asset.ready');
                 return new Response('No playback ids found', {
                     status: 400,
                 });
             }
             const playbackId = data.playback_ids[0].id || 'null';
             if (!data.upload_id) {
-                console.log(data);
-                console.log('No upload id found video.asset.ready');
                 return new Response('No upload id found', {
                     status: 400,
                 });
             }
             if (!playbackId) {
-                console.log('No playback id found video.asset.ready');
                 return new Response('No playback id found', {
                     status: 400,
                 });
