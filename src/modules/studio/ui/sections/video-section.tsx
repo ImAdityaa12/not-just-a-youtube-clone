@@ -10,6 +10,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { LIMIT } from '@/constant';
+import { VideoThumbnail } from '@/modules/videos/ui/components/video-thumbnail';
 import { trpc } from '@/trpc/client';
 import Link from 'next/link';
 import React, { Suspense } from 'react';
@@ -32,7 +33,7 @@ const VideosSectionSuspense = () => {
         },
         {
             getNextPageParam: (lastPage) => lastPage.nextCursor,
-        },
+        }
     );
 
     return (
@@ -66,7 +67,13 @@ const VideosSectionSuspense = () => {
                                     legacyBehavior
                                 >
                                     <TableRow className="cursor-pointer">
-                                        <TableCell>{video.title}</TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-4">
+                                                <div className="relative aspect-video w-36 shrink-0">
+                                                    <VideoThumbnail />
+                                                </div>
+                                            </div>
+                                        </TableCell>
                                         <TableCell>Visibility</TableCell>
                                         <TableCell>Visibility</TableCell>
                                         <TableCell>Visibility</TableCell>
