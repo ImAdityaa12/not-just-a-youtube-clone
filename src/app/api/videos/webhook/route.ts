@@ -86,7 +86,7 @@ export const POST = async (request: Request) => {
             }
 
             const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg`;
-            const previewUrl = `https://image.mux.com/${playbackId}/animated.jpg`;
+            const previewUrl = `https://image.mux.com/${playbackId}/animated.gif`;
             await db
                 .update(videos)
                 .set({
