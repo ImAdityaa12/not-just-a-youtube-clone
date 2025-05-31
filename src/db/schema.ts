@@ -5,7 +5,9 @@ import {
     text,
     timestamp,
     uniqueIndex,
+    integer,
 } from 'drizzle-orm/pg-core';
+import { number } from 'zod';
 
 export const usersTable = pgTable(
     'users',
@@ -57,6 +59,7 @@ export const videos = pgTable('videos', {
     mux_track_Status: text('mux_track_status'),
     thumbnail_url: text('thumbnail_url'),
     preview_url: text('preview_url'),
+    video_duration: integer('video_duration'),
     userId: uuid('user_id')
         .references(() => usersTable.id, { onDelete: 'cascade' })
         .notNull(),
