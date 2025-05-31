@@ -4,6 +4,7 @@ import {
     VideoAssetErroredWebhookEvent,
     VideoAssetReadyWebhookEvent,
     VideoAssetTrackReadyWebhookEvent,
+    VideoAssetDeletedWebhookEvent,
 } from '@mux/mux-node/resources/webhooks';
 import { headers } from 'next/headers';
 import { mux } from '@/lib/mux';
@@ -14,7 +15,8 @@ type WebhookEvent =
     | VideoAssetCreatedWebhookEvent
     | VideoAssetReadyWebhookEvent
     | VideoAssetErroredWebhookEvent
-    | VideoAssetTrackReadyWebhookEvent;
+    | VideoAssetTrackReadyWebhookEvent
+    | VideoAssetDeletedWebhookEvent;
 
 const SIGN_IN_SECRET = process.env.MUX_SIGNIN_SECRET!;
 
@@ -101,6 +103,62 @@ export const POST = async (request: Request) => {
                     video_duration: duration,
                 })
                 .where(eq(videos.mux_upload_id, data.upload_id as string));
+            break;
+        }
+        case 'video.asset.errored': {
+            const data = payload.data as VideoAssetErroredWebhookEvent['data'];
+
+            if (!data) {
+                return new Response('No data found', {
+                    status: 400,
+                });
+            }
+
+            await db
+                .update(videos)
+                .set({
+                    mux_status: data.status,
+                })
+                .where(eq(videos.mux_asset_Id, data.upload_id as string));
+            break;
+        }
+        case 'video.asset.deleted': {
+            const data = payload.data as VideoAssetDeletedWebhookEvent['data'];
+
+            if (!data.upload_id) {
+                return new Response('No upload id found', {
+                    status: 400,
+                });
+            }
+
+            await db
+                .delete(videos)
+                .where(eq(videos.mux_upload_id, data.upload_id));
+            break;
+        }
+        case 'video.asset.track.ready': {
+            //typescript incorrectly says asset_id is not a property of data
+            const data =
+                payload.data as VideoAssetTrackReadyWebhookEvent['data'] & {
+                    asset_id: string;
+                };
+
+            const assetId = data.asset_id;
+            const trackId = data.id;
+
+            if (!assetId) {
+                return new Response('No Asset Id found', {
+                    status: 400,
+                });
+            }
+
+            await db
+                .update(videos)
+                .set({
+                    mux_track_Id: trackId,
+                    mux_track_Status: data.status,
+                })
+                .where(eq(videos.mux_asset_Id, assetId));
             break;
         }
     }

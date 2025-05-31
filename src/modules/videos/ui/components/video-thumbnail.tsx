@@ -2,9 +2,9 @@ import { formatDuration } from '@/lib/utils';
 import Image from 'next/image';
 
 interface VideoThumbnailProps {
-    thumbnailUrl: string | null;
-    previewUrl: string | null;
-    duration: number | null;
+    thumbnailUrl?: string;
+    previewUrl?: string;
+    duration: number;
 }
 export const VideoThumbnail = ({
     thumbnailUrl,
@@ -22,6 +22,7 @@ export const VideoThumbnail = ({
                     alt="Video Thumbnail"
                 />
                 <Image
+                    unoptimized={!!previewUrl}
                     src={previewUrl ?? '/placeholder.svg'}
                     fill
                     className="size-full object-cover group-hover:opacity-100 opacity-0"

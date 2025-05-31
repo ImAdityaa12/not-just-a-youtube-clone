@@ -10,8 +10,11 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { LIMIT } from '@/constant';
+import { snakeCaseTotitle } from '@/lib/utils';
 import { VideoThumbnail } from '@/modules/videos/ui/components/video-thumbnail';
 import { trpc } from '@/trpc/client';
+import { format } from 'date-fns';
+import { Globe2Icon, LockIcon } from 'lucide-react';
 import Link from 'next/link';
 import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -72,24 +75,57 @@ const VideosSectionSuspense = () => {
                                                 <div className="relative aspect-video w-36 shrink-0">
                                                     <VideoThumbnail
                                                         thumbnailUrl={
-                                                            video.thumbnail_url
+                                                            video.thumbnail_url ??
+                                                            ''
                                                         }
                                                         previewUrl={
-                                                            video.preview_url
+                                                            video.preview_url ??
+                                                            ''
                                                         }
                                                         duration={
                                                             video.video_duration
                                                         }
                                                     />
                                                 </div>
+                                                <div className="flex flex-col overflow-hidden gap-y-1">
+                                                    <div className="text-sm line-clamp-1">
+                                                        {video.title}
+                                                    </div>
+                                                    <div className="text-sm line-clamp-1">
+                                                        {video.description ??
+                                                            'No description'}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </TableCell>
-                                        <TableCell>Visibility</TableCell>
-                                        <TableCell>Visibility</TableCell>
-                                        <TableCell>Visibility</TableCell>
-                                        <TableCell>Visibility</TableCell>
-                                        <TableCell>Visibility</TableCell>
-                                        <TableCell>Visibility</TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center">
+                                                {video.video_visibility ===
+                                                'private' ? (
+                                                    <LockIcon className="size-4 mr-2" />
+                                                ) : (
+                                                    <Globe2Icon className="size-4 mr-2" />
+                                                )}
+                                                {snakeCaseTotitle(
+                                                    video.video_visibility
+                                                )}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            {' '}
+                                            {snakeCaseTotitle(
+                                                video.mux_status ?? ''
+                                            )}
+                                        </TableCell>
+                                        <TableCell className="text-sm truncate">
+                                            {format(
+                                                new Date(video.createdAt),
+                                                'd MMM yyyy'
+                                            )}
+                                        </TableCell>
+                                        <TableCell>Views</TableCell>
+                                        <TableCell>Comments</TableCell>
+                                        <TableCell>Likes</TableCell>
                                     </TableRow>
                                 </Link>
                             ))}
