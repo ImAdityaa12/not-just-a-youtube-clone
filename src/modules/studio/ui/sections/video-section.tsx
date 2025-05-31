@@ -76,11 +76,10 @@ const VideosSectionSuspense = () => {
                                                     <VideoThumbnail
                                                         thumbnailUrl={
                                                             video.thumbnail_url ??
-                                                            ''
+                                                            null
                                                         }
                                                         previewUrl={
-                                                            video.preview_url ??
-                                                            ''
+                                                            video.preview_url
                                                         }
                                                         duration={
                                                             video.video_duration

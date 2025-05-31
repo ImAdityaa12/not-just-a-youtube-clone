@@ -2,9 +2,9 @@ import { formatDuration } from '@/lib/utils';
 import Image from 'next/image';
 
 interface VideoThumbnailProps {
-    thumbnailUrl?: string;
-    previewUrl?: string;
-    duration: number;
+    thumbnailUrl?: string | null;
+    previewUrl?: string | null;
+    duration: number | null;
 }
 export const VideoThumbnail = ({
     thumbnailUrl,
@@ -13,7 +13,6 @@ export const VideoThumbnail = ({
 }: VideoThumbnailProps) => {
     return (
         <div className="relative group">
-            {/* Thumbnail Wrapper */}
             <div className="relative w-full overflow-hidden aspect-video rounded-lg">
                 <Image
                     src={thumbnailUrl ?? '/placeholder.svg'}
