@@ -32,7 +32,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-// import { videoUpdateSchema } from '@/db/schema';
+
 interface FormSectionProps {
     videoId: string;
 }
@@ -48,15 +48,28 @@ export const FormSection = ({ videoId }: FormSectionProps) => {
 };
 
 export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
+    const utils = trpc.useUtils();
+
     const [video] = trpc.studio.getOne.useSuspenseQuery({ id: videoId });
     const [categories] = trpc.categories.getMany.useSuspenseQuery();
+
+    const update = trpc.videos.update.useMutation({
+        onSuccess: () => {
+            utils.studio.getMany.invalidate();
+            utils.studio.getOne.invalidate({ id: videoId });
+        },
+        onError: (error) => {
+            throw new Error(error.message);
+        },
+    });
+
     const form = useForm<z.infer<typeof videoUpdateSchema>>({
         resolver: zodResolver(videoUpdateSchema),
         defaultValues: video,
     });
 
     const onSubmit = async (data: z.infer<typeof videoUpdateSchema>) => {
-        console.log(data);
+        update.mutate(data);
     };
 
     return (
@@ -70,7 +83,9 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                         </p>
                     </div>
                     <div className="flex items-center gap-x-2">
-                        <Button type="submit">Submit</Button>
+                        <Button type="submit" disabled={update.isPending}>
+                            Submit
+                        </Button>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant={'ghost'} size={'icon'}>
