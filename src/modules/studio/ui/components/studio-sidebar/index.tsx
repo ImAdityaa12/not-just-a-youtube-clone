@@ -28,7 +28,7 @@ export const StudioSidebar = () => {
                                 asChild
                             >
                                 <Link
-                                    href={'/studios/videos'}
+                                    href={'/studio'}
                                     className="flex items-center"
                                 >
                                     <VideoIcon className="mr-2 size-5" />

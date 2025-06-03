@@ -11,8 +11,15 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { trpc } from '@/trpc/client';
-import { MoreVerticalIcon, TrashIcon } from 'lucide-react';
-import { Suspense } from 'react';
+import {
+    CopyCheck,
+    CopyIcon,
+    Globe2Icon,
+    LockIcon,
+    MoreVerticalIcon,
+    TrashIcon,
+} from 'lucide-react';
+import { Suspense, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useForm } from 'react-hook-form';
 import { videoUpdateSchema } from '@/db/schema';
@@ -33,6 +40,9 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'sonner';
+import VideoPlayer from '@/modules/videos/ui/components/video-player';
+import Link from 'next/link';
+import { snakeCaseTotitle } from '@/lib/utils';
 
 interface FormSectionProps {
     videoId: string;
@@ -72,6 +82,20 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
 
     const onSubmit = async (data: z.infer<typeof videoUpdateSchema>) => {
         update.mutate(data);
+    };
+
+    const fullUrl = `${
+        process.env.VERCEL_URL || 'http://localhost:3000'
+    }/videos/${videoId}`;
+
+    const [isCopied, setIsCopied] = useState(false);
+
+    const onCopy = async () => {
+        await navigator.clipboard.writeText(fullUrl);
+        setIsCopied(true);
+        setTimeout(() => {
+            setIsCopied(false);
+        }, 2000);
     };
 
     return (
@@ -178,6 +202,110 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                         </SelectItem>
                                                     );
                                                 })}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                );
+                            }}
+                        ></FormField>
+                    </div>
+                    <div className="flex flex-col gap-y-8 lg:col-span-2">
+                        <div className="flex flex-col gap-4 bg-[#F9F9F9] rounded-xl overflow-hidden h-fit">
+                            <div className="aspect-video overflow-hidden relative">
+                                <VideoPlayer
+                                    playbackId={video.mux_playback_Id}
+                                    thumbnailUrl={video.thumbnail_url}
+                                />
+                            </div>
+                            <div className="p-4 flex flex-col gap-y-6">
+                                <div className="flex justify-between items-center gap-x-2">
+                                    <div className="flex- flex-col gap-y-1">
+                                        <p className="text-muted-forground text-xs">
+                                            Video link
+                                        </p>
+                                        <div className="flex items-center gap-x-2">
+                                            <Link
+                                                href={`/studio/videos/${video.id}`}
+                                            >
+                                                <p className="line-clamp-1 text-blue-500">
+                                                    http://localhost:3000/studio/videos/816cd05c-433c-4903-bb54-f1a3f7af4ff7
+                                                </p>
+                                            </Link>
+                                            <Button
+                                                type="button"
+                                                variant={'ghost'}
+                                                size={'icon'}
+                                                className="shrink-0"
+                                                onClick={onCopy}
+                                                disabled={isCopied}
+                                            >
+                                                {isCopied ? (
+                                                    <CopyCheck />
+                                                ) : (
+                                                    <CopyIcon />
+                                                )}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <div className="flex flex-col gap-y-1">
+                                        <p className="text-muted-foreground text-xs">
+                                            Video Status
+                                        </p>
+                                        <p className="text-sm">
+                                            {snakeCaseTotitle(
+                                                video.mux_status ?? 'Preparing'
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <div className="flex flex-col gap-y-1">
+                                        <p className="text-muted-foreground text-xs">
+                                            Subtitle Status
+                                        </p>
+                                        <p className="text-sm">
+                                            {snakeCaseTotitle(
+                                                video.mux_track_Status ??
+                                                    'No Subtitle'
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <FormField
+                            control={form.control}
+                            name="video_visibility"
+                            render={({ field }) => {
+                                return (
+                                    <FormItem>
+                                        <FormLabel>Select Visibility</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={
+                                                field.value ?? undefined
+                                            }
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a category" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="public">
+                                                    <div className="flex items-center">
+                                                        <Globe2Icon className="size-4 mr-2" />
+                                                        Public
+                                                    </div>
+                                                </SelectItem>
+                                                <SelectItem value="private">
+                                                    <div className="flex items-center">
+                                                        <LockIcon className="size-4 mr-2" />
+                                                        Private
+                                                    </div>
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </FormItem>
