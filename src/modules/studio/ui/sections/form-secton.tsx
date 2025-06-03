@@ -15,8 +15,11 @@ import {
     CopyCheck,
     CopyIcon,
     Globe2Icon,
+    ImagePlusIcon,
     LockIcon,
     MoreVerticalIcon,
+    RotateCcwIcon,
+    SparklesIcon,
     TrashIcon,
 } from 'lucide-react';
 import { Suspense, useState } from 'react';
@@ -44,6 +47,9 @@ import VideoPlayer from '@/modules/videos/ui/components/video-player';
 import Link from 'next/link';
 import { snakeCaseTotitle } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { FALLBACK_THUMBNAIL } from '@/constant';
+import { Dropdown } from 'react-day-picker';
 
 interface FormSectionProps {
     videoId: string;
@@ -114,7 +120,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="mb-10">
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <h1 className="text-2xl font-bold">Video Details</h1>
@@ -190,7 +196,57 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                 );
                             }}
                         ></FormField>
-                        {/* TODO: Add Thumbnail Field here */}
+                        <FormField
+                            name="thumbnail_url"
+                            control={form.control}
+                            render={({ field }) => {
+                                return (
+                                    <FormItem>
+                                        <FormLabel>Thumbnail</FormLabel>
+                                        <FormControl>
+                                            <div className="p-0.5 border border-dashed border-neutral relative h-[84px] w-[153px] group">
+                                                <Image
+                                                    alt="Thumnbail"
+                                                    src={
+                                                        field.value ??
+                                                        FALLBACK_THUMBNAIL
+                                                    }
+                                                    fill
+                                                    objectFit="object-cover"
+                                                />
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger
+                                                        asChild
+                                                    >
+                                                        <Button
+                                                            type="button"
+                                                            size={'icon'}
+                                                            className="bg-black/50 hover:bg-black/50 absolute top-1 right-1 rounded-full opacity-100 md:opacity-0 group-hover:opacity-100 size-7"
+                                                        >
+                                                            <MoreVerticalIcon className="text-white" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem>
+                                                            <ImagePlusIcon className="size-4 mr-1" />
+                                                            Change
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem>
+                                                            <SparklesIcon className="size-4 mr-1" />
+                                                            AI generated
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem>
+                                                            <RotateCcwIcon className="size-4 mr-1" />
+                                                            Restored
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </div>
+                                        </FormControl>
+                                    </FormItem>
+                                );
+                            }}
+                        />
                         <FormField
                             control={form.control}
                             name="categoryId"
