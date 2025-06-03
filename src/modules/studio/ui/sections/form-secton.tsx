@@ -32,6 +32,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 interface FormSectionProps {
     videoId: string;
@@ -57,6 +58,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
         onSuccess: () => {
             utils.studio.getMany.invalidate();
             utils.studio.getOne.invalidate({ id: videoId });
+            toast.success('Video updated');
         },
         onError: (error) => {
             throw new Error(error.message);
