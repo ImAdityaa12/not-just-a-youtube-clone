@@ -44,3 +44,7 @@ next-env.d.ts
 /.clerk/
 
 .prettierrc
+
+# lock
+yarn.lock
+pnpm-lock.yaml
