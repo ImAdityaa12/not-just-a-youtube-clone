@@ -97,6 +97,16 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             throw new Error(error.message);
         },
     });
+    const restoreThumbnail = trpc.videos.restore.useMutation({
+        onSuccess: () => {
+            utils.studio.getMany.invalidate();
+            toast.success('Thumbnail restored');
+            router.push('/studio');
+        },
+        onError: (error) => {
+            throw new Error(error.message);
+        },
+    });
 
     const form = useForm<z.infer<typeof videoUpdateSchema>>({
         resolver: zodResolver(videoUpdateSchema),
@@ -252,9 +262,17 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                                 <SparklesIcon className="size-4 mr-1" />
                                                                 AI generated
                                                             </DropdownMenuItem>
-                                                            <DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                onClick={() =>
+                                                                    restoreThumbnail.mutate(
+                                                                        {
+                                                                            id: videoId,
+                                                                        }
+                                                                    )
+                                                                }
+                                                            >
                                                                 <RotateCcwIcon className="size-4 mr-1" />
-                                                                Restored
+                                                                Restore
                                                             </DropdownMenuItem>
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
