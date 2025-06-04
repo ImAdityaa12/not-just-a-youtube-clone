@@ -44,11 +44,25 @@ export const videosRouter = createTRPCRouter({
                     );
             }
 
-            const thumbnailUrl = `https://image.mux.com/${existingVideo.mux_playback_Id}/thumbnail.jpg`;
+            const tempThumbnailUrl = `https://image.mux.com/${existingVideo.mux_playback_Id}/thumbnail.jpg`;
+            const uploadedThumbnail = await new UTApi().uploadFilesFromUrl({
+                url: tempThumbnailUrl,
+            });
+
+            if (!uploadedThumbnail.data) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                    message: 'Video thumbnail not uploaded',
+                });
+            }
+
+            const { key: thumbnailKey, url: thumbnailUrl } =
+                uploadedThumbnail.data;
 
             const [updatedVideo] = await db
                 .update(videos)
                 .set({
+                    thumbnail_key: thumbnailKey,
                     thumbnail_url: thumbnailUrl,
                 })
                 .where(and(eq(videos.id, input.id), eq(videos.userId, userId)))

@@ -64,7 +64,6 @@ export const ourFileRouter = {
                         eq(videos.userId, user.id)
                     )
                 );
-
             return { user, ...input };
         })
         .onUploadComplete(async ({ metadata, file }) => {

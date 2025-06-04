@@ -10,6 +10,7 @@ import { headers } from 'next/headers';
 import { mux } from '@/lib/mux';
 import { db } from '@/db';
 import { videos } from '@/db/schema';
+import { UTApi } from 'uploadthing/server';
 
 type WebhookEvent =
     | VideoAssetCreatedWebhookEvent
@@ -87,18 +88,38 @@ export const POST = async (request: Request) => {
                 });
             }
 
-            const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg`;
-            const previewUrl = `https://image.mux.com/${playbackId}/animated.gif`;
+            const tempThumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg`;
+            const tempPreviewUrl = `https://image.mux.com/${playbackId}/animated.gif`;
             const duration = data.duration
                 ? Math.round(data.duration * 1000)
                 : 0;
+
+            const utApi = new UTApi();
+            const [uploadedThumbnail, uploadedPreview] =
+                await utApi.uploadFilesFromUrl([
+                    tempThumbnailUrl,
+                    tempPreviewUrl,
+                ]);
+
+            if (!uploadedThumbnail.data || !uploadedPreview.data) {
+                return new Response('Error uploading files', {
+                    status: 500,
+                });
+            }
+
+            const { key: thumbnail_key, url: thumbnailUrl } =
+                uploadedThumbnail.data;
+            const { key: previewKey, url: previewUrl } = uploadedPreview.data;
+
             await db
                 .update(videos)
                 .set({
                     mux_status: data.status,
                     mux_playback_Id: playbackId,
                     mux_asset_Id: data.id,
+                    thumbnail_key: thumbnail_key,
                     thumbnail_url: thumbnailUrl,
+                    preview_key: previewKey,
                     preview_url: previewUrl,
                     video_duration: duration,
                 })
