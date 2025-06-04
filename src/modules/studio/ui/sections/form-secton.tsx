@@ -233,7 +233,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                             FALLBACK_THUMBNAIL
                                                         }
                                                         fill
-                                                        objectFit="object-cover"
+                                                        className="size-full object-cover"
                                                     />
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger

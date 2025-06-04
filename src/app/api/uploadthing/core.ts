@@ -35,7 +35,7 @@ export const ourFileRouter = {
 
             const [existingVideo] = await db
                 .select({
-                    thumbnailKey: videos.thumbnail_key,
+                    thumbnail_key: videos.thumbnail_key,
                 })
                 .from(videos)
                 .where(
@@ -49,14 +49,21 @@ export const ourFileRouter = {
                 throw new UploadThingError('Video not found');
             }
 
-            if (existingVideo.thumbnailKey) {
-                await new UTApi().deleteFiles(existingVideo.thumbnailKey);
+            if (existingVideo.thumbnail_key) {
+                await new UTApi().deleteFiles(existingVideo.thumbnail_key);
             }
 
-            db.update(videos).set({
-                thumbnail_key: null,
-                thumbnail_url: null,
-            });
+            db.update(videos)
+                .set({
+                    thumbnail_key: null,
+                    thumbnail_url: null,
+                })
+                .where(
+                    and(
+                        eq(videos.id, input.videoId),
+                        eq(videos.userId, user.id)
+                    )
+                );
 
             return { user, ...input };
         })
