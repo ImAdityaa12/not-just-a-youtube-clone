@@ -11,7 +11,7 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "@clerk/nextjs": "^6.11.3",
+        "@clerk/nextjs": "^6.20.2",
         "@hookform/resolvers": "^3.10.0",
         "@mux/mux-node": "^11.1.0",
         "@mux/mux-player-react": "^3.4.0",
