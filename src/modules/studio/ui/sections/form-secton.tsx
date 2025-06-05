@@ -225,6 +225,10 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                         variant={'outline'}
                                                         type="button"
                                                         className="rounded-full size-6 [&_svg]:size-3"
+                                                        disabled={
+                                                            generateTitle.isPending ||
+                                                            !video.mux_track_Id
+                                                        }
                                                         onClick={() =>
                                                             generateTitle.mutate(
                                                                 {
@@ -265,6 +269,10 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                         variant={'outline'}
                                                         type="button"
                                                         className="rounded-full size-6 [&_svg]:size-3"
+                                                        disabled={
+                                                            generateTitle.isPending ||
+                                                            !video.mux_track_Id
+                                                        }
                                                         onClick={() =>
                                                             genetateDescription.mutate(
                                                                 {
