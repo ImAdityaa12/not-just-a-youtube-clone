@@ -53,6 +53,8 @@ import { FALLBACK_THUMBNAIL } from '@/constant';
 
 import ThumbnailUploadModal from '../components/thumbnail-upload-modal';
 
+import ThumbnailGenerateModal from '../components/generate-thumbnail-modal';
+
 interface FormSectionProps {
     videoId: string;
 }
@@ -76,6 +78,8 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     const [categories] = trpc.categories.getMany.useSuspenseQuery();
 
     const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
+    const [thumbnailGenerateModalopen, setThumbnailGenerateModalopen] =
+        useState(false);
 
     const update = trpc.videos.update.useMutation({
         onSuccess: () => {
@@ -174,6 +178,11 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                 onOpenChange={setThumbnailModalOpen}
                 videoId={videoId}
                 open={thumbnailModalOpen}
+            />
+            <ThumbnailGenerateModal
+                videoId={videoId}
+                onOpenChange={setThumbnailGenerateModalopen}
+                open={thumbnailGenerateModalopen}
             />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="mb-10">
@@ -345,10 +354,8 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem
                                                                 onClick={() =>
-                                                                    generateThumbnail.mutate(
-                                                                        {
-                                                                            id: videoId,
-                                                                        }
+                                                                    setThumbnailGenerateModalopen(
+                                                                        true
                                                                     )
                                                                 }
                                                             >
