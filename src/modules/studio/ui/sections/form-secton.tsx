@@ -107,6 +107,18 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             throw new Error(error.message);
         },
     });
+    const generateTitle = trpc.videos.generateThumbnail.useMutation({
+        onSuccess: () => {
+            utils.studio.getMany.invalidate();
+            toast.success('Background job started', {
+                description:
+                    'This may take a few minutes. You will be notified when the thumnail is ready.',
+            });
+        },
+        onError: (error) => {
+            throw new Error(error.message);
+        },
+    });
     const generateThumbnail = trpc.videos.generateThumbnail.useMutation({
         onSuccess: () => {
             utils.studio.getMany.invalidate();
@@ -193,8 +205,24 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                     return (
                                         <FormItem>
                                             <FormLabel>
-                                                Title
-                                                {/* TODO: Add AI Generate Button */}
+                                                <div className="flex items-center gap-x-2">
+                                                    Title
+                                                    <Button
+                                                        size={'icon'}
+                                                        variant={'outline'}
+                                                        type="button"
+                                                        className="rouded-full size-6 [&_svg]:size-3"
+                                                        onClick={() =>
+                                                            generateTitle.mutate(
+                                                                {
+                                                                    id: videoId,
+                                                                }
+                                                            )
+                                                        }
+                                                    >
+                                                        <SparklesIcon />
+                                                    </Button>
+                                                </div>
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
@@ -272,7 +300,11 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem
                                                                 onClick={() =>
-                                                                    generateThumbnail.mutate()
+                                                                    generateThumbnail.mutate(
+                                                                        {
+                                                                            id: videoId,
+                                                                        }
+                                                                    )
                                                                 }
                                                             >
                                                                 <SparklesIcon className="size-4 mr-1" />
