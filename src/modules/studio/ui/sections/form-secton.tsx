@@ -136,18 +136,6 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             throw new Error(error.message);
         },
     });
-    const generateThumbnail = trpc.videos.generateThumbnail.useMutation({
-        onSuccess: () => {
-            utils.studio.getMany.invalidate();
-            toast.success('Background job started', {
-                description:
-                    'This may take a few minutes. You will be notified when the thumnail is ready.',
-            });
-        },
-        onError: (error) => {
-            throw new Error(error.message);
-        },
-    });
 
     const form = useForm<z.infer<typeof videoUpdateSchema>>({
         resolver: zodResolver(videoUpdateSchema),

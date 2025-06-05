@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/trpc/client';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 interface ThumbnailGenerateModalProps {
     videoId: string;
@@ -43,6 +44,9 @@ const ThumbnailGenerateModal = ({
     const generateThumnail = trpc.videos.generateThumbnail.useMutation({
         onSuccess: () => {
             onOpenChange(false);
+            toast.success(
+                'Background job started it will some time to complete it till then you can sit back and relax'
+            );
         },
         onError: (error) => {
             toast.error(error.message);
@@ -84,7 +88,16 @@ const ThumbnailGenerateModal = ({
                         )}
                     />
                     <div className="flex justify-end">
-                        <Button type="submit">Generate</Button>
+                        <Button
+                            type="submit"
+                            disabled={generateThumnail.isPending}
+                            className="flex gap-2 items-center"
+                        >
+                            {generateThumnail.isPending && (
+                                <Loader2 className="animate-spin" />
+                            )}
+                            Generate
+                        </Button>
                     </div>
                 </form>
             </Form>
