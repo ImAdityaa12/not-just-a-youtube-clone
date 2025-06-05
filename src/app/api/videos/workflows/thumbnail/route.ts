@@ -35,7 +35,18 @@ async function uploadToUploadThing(
 export const { POST } = serve(async (context) => {
     const input = (await context.requestPayload) as InputType;
     const { videoId, userId, prompt } = input;
+    const video = await context.run('get-video', async () => {
+        const data = await db
+            .select()
+            .from(videos)
+            .where(and(eq(videos.id, videoId), eq(videos.userId, userId)));
 
+        if (!data[0]) {
+            throw new Error('Video not found');
+        }
+
+        return data[0];
+    });
     const thumbnnail = await context.run('generate-thumbnail', async () => {
         const generatedImageData = await geminiClient.models.generateContent({
             model: 'gemini-2.0-flash-preview-image-generation',
@@ -67,6 +78,16 @@ export const { POST } = serve(async (context) => {
     });
 
     await context.run('update-video', async () => {
+        if (video.thumbnail_key) {
+            await new UTApi().deleteFiles(video.thumbnail_key);
+            await db
+                .update(videos)
+                .set({
+                    thumbnail_key: null,
+                    thumbnail_url: null,
+                })
+                .where(and(eq(videos.id, videoId), eq(videos.userId, userId)));
+        }
         await db
             .update(videos)
             .set({
