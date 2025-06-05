@@ -16,6 +16,7 @@ import {
     CopyIcon,
     Globe2Icon,
     ImagePlusIcon,
+    Loader2,
     LockIcon,
     MoreVerticalIcon,
     RotateCcwIcon,
@@ -102,6 +103,18 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             utils.studio.getMany.invalidate();
             utils.studio.getOne.invalidate({ id: videoId });
             toast.success('Thumbnail restored');
+        },
+        onError: (error) => {
+            throw new Error(error.message);
+        },
+    });
+    const genetateDescription = trpc.videos.generateDescription.useMutation({
+        onSuccess: () => {
+            utils.studio.getMany.invalidate();
+            toast.success('Background job started', {
+                description:
+                    'This may take a few minutes. You will be notified when the thumnail is ready.',
+            });
         },
         onError: (error) => {
             throw new Error(error.message);
@@ -211,7 +224,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                         size={'icon'}
                                                         variant={'outline'}
                                                         type="button"
-                                                        className="rouded-full size-6 [&_svg]:size-3"
+                                                        className="rounded-full size-6 [&_svg]:size-3"
                                                         onClick={() =>
                                                             generateTitle.mutate(
                                                                 {
@@ -220,7 +233,11 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                             )
                                                         }
                                                     >
-                                                        <SparklesIcon />
+                                                        {generateTitle.isPending ? (
+                                                            <Loader2 className="animate-spin" />
+                                                        ) : (
+                                                            <SparklesIcon />
+                                                        )}
                                                     </Button>
                                                 </div>
                                             </FormLabel>
@@ -241,8 +258,28 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                     return (
                                         <FormItem>
                                             <FormLabel>
-                                                Description
-                                                {/* TODO: Add AI Generate Button */}
+                                                <div className="flex items-center gap-x-2">
+                                                    Description
+                                                    <Button
+                                                        size={'icon'}
+                                                        variant={'outline'}
+                                                        type="button"
+                                                        className="rounded-full size-6 [&_svg]:size-3"
+                                                        onClick={() =>
+                                                            genetateDescription.mutate(
+                                                                {
+                                                                    id: videoId,
+                                                                }
+                                                            )
+                                                        }
+                                                    >
+                                                        {genetateDescription.isPending ? (
+                                                            <Loader2 className="animate-spin" />
+                                                        ) : (
+                                                            <SparklesIcon />
+                                                        )}
+                                                    </Button>
+                                                </div>
                                             </FormLabel>
                                             <FormControl>
                                                 <Textarea

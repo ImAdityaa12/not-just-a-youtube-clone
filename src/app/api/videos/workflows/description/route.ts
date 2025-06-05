@@ -9,15 +9,12 @@ interface InputType {
     videoId: string;
 }
 
-const TITLE_SYSTEM_PROMPT = `Your task is to generate an SEO-focused title for a YouTube video based on its transcript. Please follow these guidelines:
-- Be concise but descriptive, using relevant keywords to improve discoverability.
-- Highlight the most compelling or unique aspect of the video content.
-- Avoid jargon or overly complex language unless it directly supports searchability.
-- Use action-oriented phrasing or clear value propositions where applicable.
-- Ensure the title is 3-8 words long and no more than 100 characters.
-- ONLY return the title as plain text. Do not add quotes or any additional formatting.
-- Do no include " in starting and ending of title.
-`;
+const DESCRIPTION_SYSTEM_PROMPT = `Your task is to summarize the transcript of a video. Please follow these guidelines:
+- Be brief. Condense the content into a summary that captures the key points and main ideas without losing important details.
+- Avoid jargon or overly complex language unless necessary for the context.
+- Focus on the most critical information, ignoring filler, repetitive statements, or irrelevant tangents.
+- ONLY return the summary, no other text, annotations, or comments.
+- Aim for a summary that is 3-5 sentences long and no more than 200 characters.`;
 
 export const { POST } = serve(async (context) => {
     const input = (await context.requestPayload) as InputType;
@@ -45,7 +42,7 @@ export const { POST } = serve(async (context) => {
         return text;
     });
 
-    const title = await context.run('generate-title', async () => {
+    const descripton = await context.run('generate-description', async () => {
         const completion = await openai.chat.completions.create({
             model: 'openai/gpt-4o',
             messages: [
@@ -55,21 +52,20 @@ export const { POST } = serve(async (context) => {
                 },
                 {
                     role: 'system',
-                    content: TITLE_SYSTEM_PROMPT,
+                    content: DESCRIPTION_SYSTEM_PROMPT,
                 },
             ],
         });
-        console.log(completion);
         return completion.choices[0].message.content;
     });
-    if (!title) {
+    if (!descripton) {
         throw new Error('Something went wrong');
     }
     await context.run('update-video', async () => {
         await db
             .update(videos)
             .set({
-                title: title || 'Not able to set title',
+                description: descripton || 'Not able to set description',
             })
             .where(and(eq(videos.id, videoId), eq(videos.userId, userId)));
     });
