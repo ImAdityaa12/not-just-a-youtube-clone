@@ -13,6 +13,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { trpc } from '@/trpc/client';
+import { toast } from 'sonner';
 
 interface ThumbnailGenerateModalProps {
     videoId: string;
@@ -38,8 +40,20 @@ const ThumbnailGenerateModal = ({
         },
     });
 
+    const generateThumnail = trpc.videos.generateThumbnail.useMutation({
+        onSuccess: () => {
+            onOpenChange(false);
+        },
+        onError: (error) => {
+            toast.error(error.message);
+        },
+    });
+
     const onSubmit = (data: z.infer<typeof formSchema>) => {
-        console.log(data);
+        generateThumnail.mutate({
+            id: videoId,
+            propmt: data.prompt,
+        });
     };
 
     return (

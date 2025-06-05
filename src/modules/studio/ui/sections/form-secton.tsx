@@ -124,7 +124,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             throw new Error(error.message);
         },
     });
-    const generateTitle = trpc.videos.generateThumbnail.useMutation({
+    const generateTitle = trpc.videos.generateTitle.useMutation({
         onSuccess: () => {
             utils.studio.getMany.invalidate();
             toast.success('Background job started', {
