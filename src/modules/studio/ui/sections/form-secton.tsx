@@ -54,14 +54,84 @@ import { FALLBACK_THUMBNAIL } from '@/constant';
 import ThumbnailUploadModal from '../components/thumbnail-upload-modal';
 
 import ThumbnailGenerateModal from '../components/generate-thumbnail-modal';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface FormSectionProps {
     videoId: string;
 }
 
+const FormSectionSkeleton = () => {
+    return (
+        <div className="mb-10">
+            <div className="flex items-center justify-between mb-6">
+                <div>
+                    <Skeleton className="h-6 w-40 mb-2" />
+                    <Skeleton className="h-3 w-60" />
+                </div>
+                <div className="flex items-center gap-x-2">
+                    <Skeleton className="h-10 w-20 rounded-md" />
+                    <Skeleton className="h-10 w-10 rounded-full" />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <div className="space-y-8 lg:col-span-3">
+                    <div>
+                        <Skeleton className="h-4 w-24 mb-2" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+
+                    <div>
+                        <Skeleton className="h-4 w-32 mb-2" />
+                        <Skeleton className="h-[120px] w-full" />
+                    </div>
+
+                    <div>
+                        <Skeleton className="h-4 w-24 mb-2" />
+                        <Skeleton className="h-[84px] w-[153px]" />
+                    </div>
+
+                    <div>
+                        <Skeleton className="h-4 w-24 mb-2" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-y-8 lg:col-span-2">
+                    <div className="bg-[#F9F9F9] rounded-xl overflow-hidden h-fit">
+                        <Skeleton className="aspect-video w-full" />
+                        <div className="p-4 space-y-6">
+                            <div>
+                                <Skeleton className="h-3 w-24 mb-1" />
+                                <div className="flex items-center gap-x-2">
+                                    <Skeleton className="h-4 w-64" />
+                                    <Skeleton className="h-6 w-6 rounded-full" />
+                                </div>
+                            </div>
+                            <div>
+                                <Skeleton className="h-3 w-24 mb-1" />
+                                <Skeleton className="h-4 w-32" />
+                            </div>
+                            <div>
+                                <Skeleton className="h-3 w-24 mb-1" />
+                                <Skeleton className="h-4 w-32" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <Skeleton className="h-4 w-32 mb-2" />
+                        <Skeleton className="h-10 w-full" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export const FormSection = ({ videoId }: FormSectionProps) => {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<FormSectionSkeleton />}>
             <ErrorBoundary fallback={<div>Something went wrong</div>}>
                 <FormSectionSuspense videoId={videoId} />
             </ErrorBoundary>
