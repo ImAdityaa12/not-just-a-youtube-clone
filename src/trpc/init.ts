@@ -1,6 +1,5 @@
 import { db } from '@/db';
 import { usersTable } from '@/db/schema';
-import { ratelimit } from '@/lib/rate-limit';
 import { auth } from '@clerk/nextjs/server';
 import { initTRPC, TRPCError } from '@trpc/server';
 import { eq } from 'drizzle-orm';
