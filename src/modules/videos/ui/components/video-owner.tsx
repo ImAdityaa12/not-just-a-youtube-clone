@@ -23,7 +23,7 @@ const VideoOwner = ({ user, videoId }: VideoOwnerProps) => {
                         imageUrl={user.imageUrl}
                         name={user.name}
                     />
-                    <UserInfo />
+                    <UserInfo name={user.name} size={'lg'} />
                     <span className="text-sm text-muted-foreground line-clamp-1">
                         {/* TODO: Add Subscribers Count Properly*/}
                         {0} Subscribers

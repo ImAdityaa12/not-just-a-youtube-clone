@@ -50,7 +50,7 @@ export const { POST } = serve(async (context) => {
     const thumbnnail = await context.run('generate-thumbnail', async () => {
         const generatedImageData = await geminiClient.models.generateContent({
             model: 'gemini-2.0-flash-preview-image-generation',
-            contents: prompt,
+            contents: `${prompt} make it in 1980 x 1080 resolution (16:9 aspect ratio)`,
             config: {
                 responseModalities: [Modality.TEXT, Modality.IMAGE],
             },
