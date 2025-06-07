@@ -23,11 +23,13 @@ const VideoOwner = ({ user, videoId }: VideoOwnerProps) => {
                         imageUrl={user.imageUrl}
                         name={user.name}
                     />
-                    <UserInfo name={user.name} size={'lg'} />
-                    <span className="text-sm text-muted-foreground line-clamp-1">
-                        {/* TODO: Add Subscribers Count Properly*/}
-                        {0} Subscribers
-                    </span>
+                    <div className="flex flex-col min-w-0">
+                        <UserInfo name={user.name} size={'lg'} />
+                        <span className="text-sm text-muted-foreground line-clamp-1">
+                            {/* TODO: Add Subscribers Count Properly*/}
+                            {0} Subscribers
+                        </span>
+                    </div>
                 </div>
             </Link>
             {user.clerkId === clerkUserId ? (
