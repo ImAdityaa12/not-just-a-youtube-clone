@@ -508,10 +508,11 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                                     href={`/videos/${video.id}`}
                                                 >
                                                     <p className="line-clamp-1 text-blue-500">
-                                                        {`${process.env
-                                                            .NEXT_PUBLIC_APP_URL!}/videos/${
-                                                            video.id
-                                                        }`}
+                                                        {`${
+                                                            process.env
+                                                                .VERCEL_URL ||
+                                                            'http://localhost:3000'
+                                                        }/videos/${videoId}`}
                                                     </p>
                                                 </Link>
                                                 <Button

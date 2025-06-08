@@ -10,7 +10,6 @@ interface VideoTopRowProps {
 }
 
 const VideoTopRow = ({ video }: VideoTopRowProps) => {
-    const onShare = () => {};
     return (
         <div className="flex flex-col gap-4 mt-4">
             <h1 className="text-xl font-semibold">{video.title}</h1>
