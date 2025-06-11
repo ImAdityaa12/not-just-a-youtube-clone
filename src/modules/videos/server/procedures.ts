@@ -3,7 +3,7 @@ import {
     createTRPCRouter,
     protectedProcedure,
 } from '@/trpc/init';
-import { usersTable, videoUpdateSchema, videos } from '@/db/schema';
+import { usersTable, videoUpdateSchema, videoViews, videos } from '@/db/schema';
 import { db } from '@/db';
 import { mux } from '@/lib/mux';
 import { and, eq, getTableColumns } from 'drizzle-orm';
@@ -11,12 +11,11 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { UTApi } from 'uploadthing/server';
 import { workflow } from '@/lib/qstash-workflow';
-import { create } from 'domain';
 
 export const videosRouter = createTRPCRouter({
     getOne: baseProcedure
         .input(z.object({ id: z.string().uuid() }))
-        .query(async ({ ctx, input }) => {
+        .query(async ({ input }) => {
             const { id } = input;
 
             const [existingVideo] = await db
@@ -25,6 +24,10 @@ export const videosRouter = createTRPCRouter({
                     user: {
                         ...getTableColumns(usersTable),
                     },
+                    viewCount: db.$count(
+                        videoViews,
+                        eq(videoViews.videoId, videos.id)
+                    ),
                 })
                 .from(videos)
                 .innerJoin(usersTable, eq(usersTable.id, videos.userId))
