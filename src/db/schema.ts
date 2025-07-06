@@ -33,6 +33,7 @@ export const usersTable = pgTable(
 export const usersRelations = relations(usersTable, ({ many }) => ({
     videos: many(videos),
     videoViews: many(videoViews),
+    videosReactions: many(videosReactions),
 }));
 
 export const categories = pgTable(
@@ -96,6 +97,7 @@ export const videoRelations = relations(videos, ({ one, many }) => ({
         references: [categories.id],
     }),
     views: many(videoViews),
+    reactions: many(videosReactions),
 }));
 
 export const videoViews = pgTable(
@@ -132,3 +134,44 @@ export const videoViewrelations = relations(videoViews, ({ one }) => ({
 export const videoViewSelectSchema = createSelectSchema(videoViews);
 export const videoViewInsertSchema = createInsertSchema(videoViews);
 export const videoViewUpdateSchema = createUpdateSchema(videoViews);
+
+export const reactionType = pgEnum('reaction_type', ['like', 'dislike']);
+
+export const videosReactions = pgTable(
+    'videos_reactions',
+    {
+        userId: uuid('user_id')
+            .references(() => usersTable.id, { onDelete: 'cascade' })
+            .notNull(),
+        videoId: uuid('video_id')
+            .references(() => videos.id, { onDelete: 'cascade' })
+            .notNull(),
+        type: reactionType('type').notNull(),
+        createdAt: timestamp('created_at').notNull().defaultNow(),
+        updatedAt: timestamp('updated_at').notNull().defaultNow(),
+    },
+    (t) => [
+        primaryKey({
+            name: 'video_reactions_pk',
+            columns: [t.userId, t.videoId],
+        }),
+    ]
+);
+
+export const videoReactionsRelations = relations(
+    videosReactions,
+    ({ one }) => ({
+        user: one(usersTable, {
+            fields: [videosReactions.userId],
+            references: [usersTable.id],
+        }),
+        videos: one(videos, {
+            fields: [videosReactions.videoId],
+            references: [videos.id],
+        }),
+    })
+);
+
+export const videoReactionsSelectSchema = createSelectSchema(videosReactions);
+export const videoReactionsInsertSchema = createInsertSchema(videosReactions);
+export const videoReactionsUpdateSchema = createUpdateSchema(videosReactions);
