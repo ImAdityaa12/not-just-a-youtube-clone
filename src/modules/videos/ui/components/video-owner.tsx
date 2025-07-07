@@ -4,8 +4,9 @@ import Link from 'next/link';
 import UserAvatar from '@/components/user-avatar';
 import { useAuth } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
-import SubscriptionButton from '../subscriptions/ui/components/subscription-button';
 import UserInfo from '../users/ui/components/user-info';
+import SubscriptionButton from '@/modules/subscriptions/ui/components/subscription-button';
+import { useSubscription } from '@/hooks/use-subscription';
 
 interface VideoOwnerProps {
     user: VideoGetOneOutput['user'];
@@ -14,6 +15,11 @@ interface VideoOwnerProps {
 
 const VideoOwner = ({ user, videoId }: VideoOwnerProps) => {
     const { userId: clerkUserId } = useAuth();
+    const { isPending, onClick } = useSubscription({
+        isSubscribed: user.viewerSubscribed,
+        userId: user.id,
+        fromVideoId: videoId,
+    });
     return (
         <div className="flex items-center  justify-between sm:justify-start gap-3 min-w-0">
             <Link href={`/users/${user.id}`}>
@@ -26,8 +32,7 @@ const VideoOwner = ({ user, videoId }: VideoOwnerProps) => {
                     <div className="flex flex-col min-w-0">
                         <UserInfo name={user.name} size={'lg'} />
                         <span className="text-sm text-muted-foreground line-clamp-1">
-                            {/* TODO: Add Subscribers Count Properly*/}
-                            {0} Subscribers
+                            {user.subsciberCount} Subscribers
                         </span>
                     </div>
                 </div>
@@ -38,10 +43,10 @@ const VideoOwner = ({ user, videoId }: VideoOwnerProps) => {
                 </Button>
             ) : (
                 <SubscriptionButton
-                    disabled={false}
-                    isSubscribed={false}
+                    disabled={isPending}
+                    isSubscribed={user.viewerSubscribed}
                     size={'sm'}
-                    onClick={() => {}}
+                    onClick={onClick}
                 />
             )}
         </div>

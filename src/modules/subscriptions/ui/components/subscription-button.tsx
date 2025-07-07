@@ -25,7 +25,7 @@ const SubscriptionButton = ({
             disabled={disabled}
             className={cn('rounded-full', className)}
         >
-            {isSubscribed ? 'Subscribed' : 'Subscribe'}
+            {isSubscribed ? 'Unsubscribe' : 'Subscribe'}
         </Button>
     );
 };

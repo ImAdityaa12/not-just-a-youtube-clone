@@ -34,6 +34,36 @@ export const usersRelations = relations(usersTable, ({ many }) => ({
     videos: many(videos),
     videoViews: many(videoViews),
     videosReactions: many(videosReactions),
+    subcriptions: many(subscriptions, {
+        relationName: 'subscriptions_viewerId_fkey',
+    }),
+    subscribers: many(subscriptions, {
+        relationName: 'subscriptions_creatorId_fkey',
+    }),
+}));
+
+export const subscriptions = pgTable('subscriptions', {
+    viewerId: uuid('viewer_id')
+        .references(() => usersTable.id, { onDelete: 'cascade' })
+        .notNull(),
+    creatorId: uuid('creator_id')
+        .references(() => usersTable.id, { onDelete: 'cascade' })
+        .notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+    viewerId: one(usersTable, {
+        fields: [subscriptions.viewerId],
+        references: [usersTable.id],
+        relationName: 'subscriptions_viewerId_fkey',
+    }),
+    creatorId: one(usersTable, {
+        fields: [subscriptions.creatorId],
+        references: [usersTable.id],
+        relationName: 'subscriptions_creatorId_fkey',
+    }),
 }));
 
 export const categories = pgTable(
