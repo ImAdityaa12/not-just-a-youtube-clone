@@ -2,13 +2,24 @@
 
 import { comments } from '@/db/schema';
 import { trpc } from '@/trpc/client';
-import React from 'react';
+import React, { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 interface CommentsSectionProps {
     videoId: string;
 }
 
-const CommentsSection = ({ videoId }: CommentsSectionProps) => {
+export const CommentsSection = ({ videoId }: CommentsSectionProps) => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ErrorBoundary fallback={<div>Something went wrong</div>}>
+                <CommentsSectionSuspense videoId={videoId} />
+            </ErrorBoundary>
+        </Suspense>
+    );
+};
+
+const CommentsSectionSuspense = ({ videoId }: CommentsSectionProps) => {
     const [comments] = trpc.comments.getMany.useSuspenseQuery({
         videoId,
     });
