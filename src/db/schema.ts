@@ -54,12 +54,12 @@ export const subscriptions = pgTable('subscriptions', {
 });
 
 export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
-    viewerId: one(usersTable, {
+    viewer: one(usersTable, {
         fields: [subscriptions.viewerId],
         references: [usersTable.id],
         relationName: 'subscriptions_viewerId_fkey',
     }),
-    creatorId: one(usersTable, {
+    creator: one(usersTable, {
         fields: [subscriptions.creatorId],
         references: [usersTable.id],
         relationName: 'subscriptions_creatorId_fkey',
