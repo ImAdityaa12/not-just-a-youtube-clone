@@ -1,3 +1,4 @@
+import { table } from 'console';
 import { relations } from 'drizzle-orm';
 import {
     pgTable,
@@ -8,6 +9,7 @@ import {
     integer,
     pgEnum,
     primaryKey,
+    foreignKey,
 } from 'drizzle-orm/pg-core';
 
 import {
@@ -133,18 +135,31 @@ export const videoRelations = relations(videos, ({ one, many }) => ({
     comments: many(comments),
 }));
 
-export const comments = pgTable('comments', {
-    id: uuid('id').primaryKey().defaultRandom(),
-    userId: uuid('user_id')
-        .references(() => usersTable.id, { onDelete: 'cascade' })
-        .notNull(),
-    videoId: uuid('video_id')
-        .references(() => videos.id, { onDelete: 'cascade' })
-        .notNull(),
-    value: text('value').notNull(),
-    createdAt: timestamp('created_at').notNull().defaultNow(),
-    updatedAt: timestamp('updated_at').notNull().defaultNow(),
-});
+export const comments = pgTable(
+    'comments',
+    {
+        id: uuid('id').primaryKey().defaultRandom(),
+        userId: uuid('user_id')
+            .references(() => usersTable.id, { onDelete: 'cascade' })
+            .notNull(),
+        videoId: uuid('video_id')
+            .references(() => videos.id, { onDelete: 'cascade' })
+            .notNull(),
+        value: text('value').notNull(),
+        parentId: uuid('parent_id'),
+        createdAt: timestamp('created_at').notNull().defaultNow(),
+        updatedAt: timestamp('updated_at').notNull().defaultNow(),
+    },
+    (table) => {
+        return [
+            foreignKey({
+                columns: [table.parentId],
+                foreignColumns: [table.id],
+                name: 'comments_parent_id_fkey',
+            }).onDelete('cascade'),
+        ];
+    }
+);
 
 export const commentSelectSchema = createSelectSchema(comments);
 export const commentInsertSchema = createInsertSchema(comments);
@@ -159,7 +174,15 @@ export const commentRelations = relations(comments, ({ one, many }) => ({
         fields: [comments.videoId],
         references: [videos.id],
     }),
+    parent: one(comments, {
+        fields: [comments.parentId],
+        references: [comments.id],
+        relationName: 'comments_parent_id_fkey',
+    }),
     reactions: many(commentReactions),
+    replies: many(comments, {
+        relationName: 'comments_parent_id_fkey',
+    }),
 }));
 
 export const commentReactions = pgTable(
