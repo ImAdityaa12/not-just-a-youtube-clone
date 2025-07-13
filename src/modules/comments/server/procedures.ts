@@ -12,13 +12,13 @@ export const commentsRouter = createTRPCRouter({
     create: protectedProcedure
         .input(
             z.object({
-                id: z.string().uuid(),
+                videoId: z.string().uuid(),
                 value: z.string(),
             })
         )
         .mutation(async ({ ctx, input }) => {
             const { id: userId } = ctx.user;
-            const { id: videoId, value } = input;
+            const { videoId, value } = input;
 
             const [createdComment] = await db
                 .insert(comments)
