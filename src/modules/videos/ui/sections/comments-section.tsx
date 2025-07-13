@@ -2,6 +2,7 @@
 
 import { comments } from '@/db/schema';
 import { CommentForm } from '@/modules/comments/ui/components/comment-form';
+import { CommmentItem } from '@/modules/comments/ui/components/comment-item';
 import { trpc } from '@/trpc/client';
 import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -30,7 +31,11 @@ const CommentsSectionSuspense = ({ videoId }: CommentsSectionProps) => {
                 <h1>0 Comments</h1>
                 <CommentForm videoId={videoId} />
             </div>
-            {JSON.stringify(comments)}
+            <div className="flex flex-col gap-4 mt-2">
+                {comments.map((comment) => (
+                    <CommmentItem key={comment.id} comment={comment} />
+                ))}
+            </div>
         </div>
     );
 };
