@@ -45,7 +45,35 @@ export const CommmentItem = ({ comment }: CommentItemProps) => {
             }
         },
     });
+    const like = trpc.commentReactions.like.useMutation({
+        onSuccess: () => {
+            utils.comments.getMany.invalidate({
+                videoId: comment.videoId,
+            });
+        },
+        onError: (error) => {
+            if (error.data?.code === 'UNAUTHORIZED') {
+                clerk.openSignIn();
+            } else {
+                toast.error('Something went wrong');
+            }
+        },
+    });
 
+    const dislike = trpc.commentReactions.disLike.useMutation({
+        onSuccess: () => {
+            utils.comments.getMany.invalidate({
+                videoId: comment.videoId,
+            });
+        },
+        onError: (error) => {
+            if (error.data?.code === 'UNAUTHORIZED') {
+                clerk.openSignIn();
+            } else {
+                toast.error('Something went wrong');
+            }
+        },
+    });
     return (
         <div>
             <div className="flex gap-4">
@@ -77,13 +105,15 @@ export const CommmentItem = ({ comment }: CommentItemProps) => {
                             <Button
                                 className="size-8"
                                 size={'icon'}
-                                disabled={false}
+                                disabled={like.isPending || dislike.isPending}
                                 variant={'ghost'}
-                                onClick={() => {}}
+                                onClick={() =>
+                                    like.mutate({ commentId: comment.id })
+                                }
                             >
                                 <ThumbsUpIcon
                                     className={cn(
-                                        comment.viewerReaction
+                                        comment.viewerReaction === 'like'
                                             ? 'fill-black'
                                             : ''
                                     )}
@@ -95,13 +125,15 @@ export const CommmentItem = ({ comment }: CommentItemProps) => {
                             <Button
                                 className="size-8"
                                 size={'icon'}
-                                disabled={false}
+                                disabled={like.isPending || dislike.isPending}
                                 variant={'ghost'}
-                                onClick={() => {}}
+                                onClick={() =>
+                                    dislike.mutate({ commentId: comment.id })
+                                }
                             >
                                 <ThumbsDownIcon
                                     className={cn(
-                                        comment.viewerReaction
+                                        comment.viewerReaction === 'dislike'
                                             ? 'fill-black'
                                             : ''
                                     )}
