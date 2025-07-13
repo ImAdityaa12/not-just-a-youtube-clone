@@ -5,7 +5,7 @@ import {
     createTRPCRouter,
     protectedProcedure,
 } from '@/trpc/init';
-import { and, desc, eq, getTableColumns, lt, or } from 'drizzle-orm';
+import { and, count, desc, eq, getTableColumns, lt, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 export const commentsRouter = createTRPCRouter({
@@ -45,7 +45,12 @@ export const commentsRouter = createTRPCRouter({
         )
         .query(async ({ input }) => {
             const { videoId, cursor, limit } = input;
-
+            const [totalData] = await db
+                .select({
+                    count: count(),
+                })
+                .from(comments)
+                .where(eq(comments.videoId, videoId));
             const data = await db
                 .select({
                     ...getTableColumns(comments),
@@ -81,6 +86,7 @@ export const commentsRouter = createTRPCRouter({
                 : null;
 
             return {
+                totalCount: totalData.count,
                 items,
                 nextCursor,
             };
