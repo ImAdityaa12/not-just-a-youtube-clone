@@ -83,7 +83,7 @@ export const CommmentItem = ({ comment }: CommentItemProps) => {
                             >
                                 <ThumbsUpIcon
                                     className={cn(
-                                        comment.viewerReaction === 'like'
+                                        comment.viewerReaction
                                             ? 'fill-black'
                                             : ''
                                     )}
@@ -101,7 +101,7 @@ export const CommmentItem = ({ comment }: CommentItemProps) => {
                             >
                                 <ThumbsDownIcon
                                     className={cn(
-                                        comment.viewerReaction === 'dislike'
+                                        comment.viewerReaction
                                             ? 'fill-black'
                                             : ''
                                     )}
