@@ -77,15 +77,13 @@ export const CommmentItem = ({ comment }: CommentItemProps) => {
     return (
         <div>
             <div className="flex gap-4">
-                <Link
-                    href={`/users/$import { comment } from 'postcss';
-{comment.userId}`}
-                />
-                <UserAvatar
-                    size={'lg'}
-                    imageUrl={comment.user.imageUrl}
-                    name={comment.user.name}
-                />
+                <Link href={`/users/${comment.user.id}`}>
+                    <UserAvatar
+                        size={'lg'}
+                        imageUrl={comment.user.imageUrl}
+                        name={comment.user.name}
+                    />
+                </Link>
                 <div className="flex flex-1 min-w-[0] flex-col">
                     <Link href={`/users/${comment.userId}`}>
                         <div className="flex items-center gap-2 mb-0.5">
