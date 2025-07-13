@@ -2,10 +2,10 @@
 
 import InfiniteScroll from '@/components/infinite-scroll';
 import { LIMIT } from '@/constant';
-import { comments } from '@/db/schema';
 import { CommentForm } from '@/modules/comments/ui/components/comment-form';
 import { CommmentItem } from '@/modules/comments/ui/components/comment-item';
 import { trpc } from '@/trpc/client';
+import { Loader2Icon } from 'lucide-react';
 import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -13,9 +13,17 @@ interface CommentsSectionProps {
     videoId: string;
 }
 
+const CommentSectinSkeleton = () => {
+    return (
+        <div className="mt-6 flex justify-center items-center">
+            <Loader2Icon className="text-muted-foreground size-7 animate-spin" />
+        </div>
+    );
+};
+
 export const CommentsSection = ({ videoId }: CommentsSectionProps) => {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<CommentSectinSkeleton />}>
             <ErrorBoundary fallback={<div>Something went wrong</div>}>
                 <CommentsSectionSuspense videoId={videoId} />
             </ErrorBoundary>
