@@ -39,6 +39,10 @@ export const CommentForm = ({
             utils.comments.getMany.invalidate({
                 videoId,
             });
+            utils.comments.getMany.invalidate({
+                videoId,
+                parentId,
+            });
             form.reset();
             toast.success('Comment Added');
             onSuccess?.();
