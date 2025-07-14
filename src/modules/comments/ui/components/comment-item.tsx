@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import {
+    ChevronDownIcon,
+    ChevronUpIcon,
     MessageSquareIcon,
     MoreVerticalIcon,
     ThumbsDownIcon,
@@ -22,6 +24,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { CommentForm } from './comment-form';
+import { CommentReplies } from './comment-replies';
 
 interface CommentItemProps {
     comment: CommentsGetManyOutput['items'][number];
@@ -88,7 +91,7 @@ export const CommmentItem = ({
             <div className="flex gap-4">
                 <Link href={`/users/${comment.user.id}`}>
                     <UserAvatar
-                        size={'lg'}
+                        size={variant === 'comment' ? 'lg' : 'sm'}
                         imageUrl={comment.user.imageUrl}
                         name={comment.user.name}
                     />
@@ -164,6 +167,7 @@ export const CommmentItem = ({
                         )}
                     </div>
                 </div>
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button
@@ -175,14 +179,11 @@ export const CommmentItem = ({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        {variant === 'comment' && (
-                            <DropdownMenuItem
-                                onClick={() => setIsReplyOpen(true)}
-                            >
-                                <MessageSquareIcon className="mr-2 size-4" />
-                                Reply
-                            </DropdownMenuItem>
-                        )}
+                        <DropdownMenuItem onClick={() => setIsReplyOpen(true)}>
+                            <MessageSquareIcon className="mr-2 size-4" />
+                            Reply
+                        </DropdownMenuItem>
+
                         {comment.user.clerkId === userId && (
                             <DropdownMenuItem
                                 onClick={() =>
@@ -210,6 +211,30 @@ export const CommmentItem = ({
                     />
                 </div>
             )}
+            {comment.replyCount > 0 && variant === 'comment' && (
+                <div className="pl-14">
+                    <Button
+                        size={'sm'}
+                        variant={'teriary'}
+                        onClick={() => setIsRepliesOpen((current) => !current)}
+                    >
+                        {isRepliesOpen ? (
+                            <ChevronUpIcon />
+                        ) : (
+                            <ChevronDownIcon />
+                        )}
+                        {comment.replyCount} Reply
+                    </Button>
+                </div>
+            )}
+            {comment.replyCount > 0 &&
+                variant === 'comment' &&
+                isRepliesOpen && (
+                    <CommentReplies
+                        parentId={comment.id}
+                        videoId={comment.videoId}
+                    />
+                )}
         </div>
     );
 };
