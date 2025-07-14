@@ -179,10 +179,14 @@ export const CommmentItem = ({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => setIsReplyOpen(true)}>
-                            <MessageSquareIcon className="mr-2 size-4" />
-                            Reply
-                        </DropdownMenuItem>
+                        {variant === 'comment' && (
+                            <DropdownMenuItem
+                                onClick={() => setIsReplyOpen(true)}
+                            >
+                                <MessageSquareIcon className="mr-2 size-4" />
+                                Reply
+                            </DropdownMenuItem>
+                        )}
 
                         {comment.user.clerkId === userId && (
                             <DropdownMenuItem
