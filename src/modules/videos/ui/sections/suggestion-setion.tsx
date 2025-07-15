@@ -5,21 +5,24 @@ import { trpc } from '@/trpc/client';
 import React from 'react';
 import { VideoRowCard } from '../components/video-row-card';
 import VideoGridCard from '../components/video-grid-card';
+import InfiniteScroll from '@/components/infinite-scroll';
 
 interface SuggestionSectionProps {
     videoId: string;
+    isManual?: boolean;
 }
 
-const SuggestionSection = ({ videoId }: SuggestionSectionProps) => {
-    const [suggestions] = trpc.suggestions.getMany.useSuspenseInfiniteQuery(
-        {
-            videoId,
-            limit: LIMIT,
-        },
-        {
-            getNextPageParam: (lastPage) => lastPage.nextCursor,
-        }
-    );
+const SuggestionSection = ({ videoId, isManual }: SuggestionSectionProps) => {
+    const [suggestions, query] =
+        trpc.suggestions.getMany.useSuspenseInfiniteQuery(
+            {
+                videoId,
+                limit: LIMIT,
+            },
+            {
+                getNextPageParam: (lastPage) => lastPage.nextCursor,
+            }
+        );
 
     return (
         <>
@@ -42,6 +45,12 @@ const SuggestionSection = ({ videoId }: SuggestionSectionProps) => {
                         <VideoGridCard data={suggestion} key={suggestion.id} />
                     ))}
             </div>
+            <InfiniteScroll
+                hasNextPage={query.hasNextPage}
+                isFetchingNextPage={query.isFetchingNextPage}
+                fetchNextPage={query.fetchNextPage}
+                isManual={isManual}
+            />
         </>
     );
 };
