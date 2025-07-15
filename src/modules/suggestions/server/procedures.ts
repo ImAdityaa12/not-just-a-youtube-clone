@@ -58,6 +58,7 @@ export const suggestinsRouter = createTRPCRouter({
                 .where(
                     and(
                         not(eq(videos.id, input.videoId)),
+                        eq(videos.video_visibility, 'public'),
                         existingVideo.categoryId
                             ? eq(videos.categoryId, existingVideo.categoryId)
                             : undefined,
