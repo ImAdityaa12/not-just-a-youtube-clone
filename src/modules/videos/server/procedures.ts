@@ -18,6 +18,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { UTApi } from 'uploadthing/server';
 import { workflow } from '@/lib/qstash-workflow';
+import { create } from 'domain';
 
 export const videosRouter = createTRPCRouter({
     getOne: baseProcedure
@@ -152,6 +153,56 @@ export const videosRouter = createTRPCRouter({
             });
 
             return workflowRunId;
+        }),
+    revalidate: protectedProcedure
+        .input(z.object({ id: z.string().uuid() }))
+        .mutation(async ({ ctx, input }) => {
+            const { id: userId } = ctx.user;
+            const { id } = input;
+            const [existingVideo] = await db
+                .select()
+                .from(videos)
+                .where(and(eq(videos.id, input.id), eq(videos.userId, userId)));
+            if (!existingVideo) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                });
+            }
+
+            if (!existingVideo.mux_upload_id) {
+                throw new TRPCError({
+                    code: 'BAD_REQUEST',
+                });
+            }
+
+            const upload = await mux.video.uploads.retrieve(
+                existingVideo.mux_upload_id
+            );
+
+            if (!upload || !upload.asset_id) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                });
+            }
+            const asset = await mux.video.assets.retrieve(upload.asset_id);
+
+            const playbackId = asset.playback_ids?.[0].id;
+
+            const duration = asset.duration
+                ? Math.round(asset.duration * 1000)
+                : 0;
+            const [updatedAsset] = await db
+                .update(videos)
+                .set({
+                    mux_status: asset.status,
+                    mux_playback_Id: playbackId,
+                    video_duration: duration,
+                    mux_asset_Id: asset.id,
+                })
+                .where(and(eq(videos.id, id), eq(videos.userId, userId)))
+                .returning();
+
+            return updatedAsset;
         }),
     restore: protectedProcedure
         .input(z.object({ id: z.string().uuid() }))

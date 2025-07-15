@@ -158,6 +158,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             toast.success('Video updated');
         },
         onError: (error) => {
+            toast.error(error.message);
             throw new Error(error.message);
         },
     });
@@ -169,6 +170,18 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             router.push('/studio');
         },
         onError: (error) => {
+            toast.error(error.message);
+            throw new Error(error.message);
+        },
+    });
+    const revalidate = trpc.videos.revalidate.useMutation({
+        onSuccess: () => {
+            utils.studio.getMany.invalidate();
+            utils.studio.getOne.invalidate({ id: videoId });
+            toast.success('Video revalidated');
+        },
+        onError: (error) => {
+            toast.error(error.message);
             throw new Error(error.message);
         },
     });
@@ -276,6 +289,14 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                                     >
                                         <TrashIcon className="size-4 mr-2" />
                                         Delete
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={() =>
+                                            revalidate.mutate({ id: videoId })
+                                        }
+                                    >
+                                        <RotateCcwIcon className="size-4 mr-2" />
+                                        Revalidate
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
