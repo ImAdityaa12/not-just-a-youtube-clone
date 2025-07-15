@@ -6,16 +6,32 @@ import React, { Suspense } from 'react';
 import { VideoRowCard } from '../components/video-row-card';
 import VideoGridCard from '../components/video-grid-card';
 import InfiniteScroll from '@/components/infinite-scroll';
-import { Loader2Icon } from 'lucide-react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 interface SuggestionSectionProps {
     videoId: string;
     isManual?: boolean;
 }
+
+const SuggestionSectionSkeleton = () => {
+    return (
+        <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-1">
+            {Array.from({ length: 10 }).map((_, i) => (
+                <div key={i} className="flex gap-x-2">
+                    <div className="relative h-24 w-40 shrink-0 overflow-hidden rounded-md bg-muted-foreground/30 animate-pulse" />
+                    <div className="space-y-2">
+                        <div className="h-4 w-[200px] rounded-md bg-muted-foreground/30 animate-pulse" />
+                        <div className="h-4 w-[100px] rounded-md bg-muted-foreground/30 animate-pulse" />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+};
+
 const SuggestionSection = ({ videoId, isManual }: SuggestionSectionProps) => {
     return (
-        <Suspense fallback={<Loader2Icon className="animate-spin" />}>
+        <Suspense fallback={<SuggestionSectionSkeleton />}>
             <ErrorBoundary fallback={<div>Something went wrong</div>}>
                 <SuggestionSectionSuspense
                     videoId={videoId}
