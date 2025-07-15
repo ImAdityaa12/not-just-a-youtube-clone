@@ -3,11 +3,13 @@ import { formatDuration } from '@/lib/utils';
 import Image from 'next/image';
 
 interface VideoThumbnailProps {
+    title?: string;
     thumbnailUrl?: string | null;
     previewUrl?: string | null;
     duration: number | null;
 }
 export const VideoThumbnail = ({
+    title,
     thumbnailUrl,
     previewUrl,
     duration = 0,
