@@ -192,6 +192,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             toast.success('Thumbnail restored');
         },
         onError: (error) => {
+            toast.error(error.message);
             throw new Error(error.message);
         },
     });
@@ -204,6 +205,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             });
         },
         onError: (error) => {
+            toast.error(error.message);
             throw new Error(error.message);
         },
     });
@@ -216,6 +218,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
             });
         },
         onError: (error) => {
+            toast.error(error.message);
             throw new Error(error.message);
         },
     });
