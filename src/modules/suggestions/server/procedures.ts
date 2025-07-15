@@ -2,7 +2,7 @@ import { createTRPCRouter, protectedProcedure } from '@/trpc/init';
 import { z } from 'zod';
 import { usersTable, videos, videosReactions, videoViews } from '@/db/schema';
 import { db } from '@/db';
-import { eq, and, or, lt, desc, getTableColumns } from 'drizzle-orm';
+import { eq, and, or, lt, desc, getTableColumns, not } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 export const suggestinsRouter = createTRPCRouter({
     getMany: protectedProcedure
@@ -34,14 +34,30 @@ export const suggestinsRouter = createTRPCRouter({
                 .select({
                     ...getTableColumns(videos),
                     user: usersTable,
-                    viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
-                    likeCount: db.$count(videosReactions, and(eq(videosReactions.videoId, videos.id), eq(videosReactions.type, 'like'))),
-                    dislikeCount: db.$count(videosReactions, and(eq(videosReactions.videoId, videos.id), eq(videosReactions.type, 'dislike'))),
+                    viewCount: db.$count(
+                        videoViews,
+                        eq(videoViews.videoId, videos.id)
+                    ),
+                    likeCount: db.$count(
+                        videosReactions,
+                        and(
+                            eq(videosReactions.videoId, videos.id),
+                            eq(videosReactions.type, 'like')
+                        )
+                    ),
+                    dislikeCount: db.$count(
+                        videosReactions,
+                        and(
+                            eq(videosReactions.videoId, videos.id),
+                            eq(videosReactions.type, 'dislike')
+                        )
+                    ),
                 })
                 .from(videos)
                 .innerJoin(usersTable, eq(videos.userId, usersTable.id))
                 .where(
                     and(
+                        not(eq(videos.id, input.videoId)),
                         existingVideo.categoryId
                             ? eq(videos.categoryId, existingVideo.categoryId)
                             : undefined,
