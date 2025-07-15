@@ -2,17 +2,33 @@
 
 import { LIMIT } from '@/constant';
 import { trpc } from '@/trpc/client';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { VideoRowCard } from '../components/video-row-card';
 import VideoGridCard from '../components/video-grid-card';
 import InfiniteScroll from '@/components/infinite-scroll';
+import { Loader2Icon } from 'lucide-react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 interface SuggestionSectionProps {
     videoId: string;
     isManual?: boolean;
 }
-
 const SuggestionSection = ({ videoId, isManual }: SuggestionSectionProps) => {
+    return (
+        <Suspense fallback={<Loader2Icon className="animate-spin" />}>
+            <ErrorBoundary fallback={<div>Something went wrong</div>}>
+                <SuggestionSectionSuspense
+                    videoId={videoId}
+                    isManual={isManual}
+                />
+            </ErrorBoundary>
+        </Suspense>
+    );
+};
+const SuggestionSectionSuspense = ({
+    videoId,
+    isManual,
+}: SuggestionSectionProps) => {
     const [suggestions, query] =
         trpc.suggestions.getMany.useSuspenseInfiniteQuery(
             {
