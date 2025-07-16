@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 
 import { toast } from 'sonner';
+import { APP_URL } from '@/constant';
 
 interface VideoMenuProps {
     videoId: string;
@@ -31,7 +32,7 @@ const VideoMenu = ({
 }: VideoMenuProps) => {
     const onShare = async () => {
         const fullUrl = `${
-            process.env.VERCEL_URL || 'http://localhost:3000'
+            APP_URL || 'http://localhost:3000'
         }/videos/${videoId}`;
         try {
             await navigator.clipboard.writeText(fullUrl);

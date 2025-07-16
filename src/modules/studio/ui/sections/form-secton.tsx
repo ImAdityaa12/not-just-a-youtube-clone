@@ -49,7 +49,7 @@ import Link from 'next/link';
 import { snakeCaseTotitle } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { FALLBACK_THUMBNAIL } from '@/constant';
+import { APP_URL, FALLBACK_THUMBNAIL } from '@/constant';
 
 import ThumbnailUploadModal from '../components/thumbnail-upload-modal';
 
@@ -232,9 +232,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
         update.mutate(data);
     };
 
-    const fullUrl = `${
-        process.env.VERCEL_URL || 'http://localhost:3000'
-    }/videos/${videoId}`;
+    const fullUrl = `${APP_URL || 'http://localhost:3000'}/videos/${videoId}`;
 
     const [isCopied, setIsCopied] = useState(false);
 

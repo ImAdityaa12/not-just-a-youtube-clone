@@ -1,7 +1,26 @@
+import { APP_URL } from '@/constant';
 import { Search } from 'lucide-react';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 const HomeNavbarSearch = () => {
+    const router = useRouter();
+
+    const [value, setValue] = useState('');
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
+        const url = new URL('/search', APP_URL);
+        const newQuery = value.trim();
+
+        url.searchParams.set('query', newQuery);
+
+        if (newQuery === '') {
+            url.searchParams.delete('query');
+        }
+        setValue(newQuery);
+        router.push(url.toString());
+    };
     return (
         <form className="flex w-full max-w-[600px]">
             <div className="relative w-full">
