@@ -13,10 +13,7 @@ const HomeNavbarSearch = () => {
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const url = new URL(
-            '/search',
-            APP_URL ? `${APP_URL}` : `http://localhost:3000`
-        );
+        const url = new URL('/search', APP_URL);
         const newQuery = value.trim();
 
         url.searchParams.set('query', newQuery);

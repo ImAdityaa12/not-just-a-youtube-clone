@@ -47,7 +47,7 @@ export const VideoRowCardSkeleton = ({
     return (
         <>
             {Array.from({ length: LIMIT }).map((_, i) => (
-                <div className={videoRowCardVariants({ size })}>
+                <div className={videoRowCardVariants({ size })} key={i}>
                     <div className={thumbnailVariants({ size })}>
                         <Skeleton className="aspect-video" />
                     </div>
