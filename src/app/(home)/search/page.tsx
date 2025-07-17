@@ -1,3 +1,4 @@
+import { LIMIT } from '@/constant';
 import SearchView from '@/modules/search/ui/views/search-view';
 import { HydrateClient, trpc } from '@/trpc/server';
 import React from 'react';
@@ -13,6 +14,11 @@ interface PageProps {
 const page = async ({ searchParams }: PageProps) => {
     const { query, categoryId } = await searchParams;
     void trpc.categories.getMany.prefetch();
+    void trpc.search.getMany.prefetchInfinite({
+        query,
+        categoryId,
+        limit: LIMIT,
+    });
     return (
         <HydrateClient>
             <SearchView categoryId={categoryId} query={query} />
