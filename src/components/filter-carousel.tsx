@@ -1,15 +1,4 @@
 'use client';
-
-interface FilterCarouselProps {
-    value?: string | undefined;
-    isLoading?: boolean;
-    onSelect: (value: string | null) => void;
-    data: {
-        value: string;
-        label: string;
-    }[];
-}
-
 import React, { useEffect, useState } from 'react';
 import {
     Carousel,
@@ -23,6 +12,16 @@ import { Badge } from './ui/badge';
 import { useSidebar } from './ui/sidebar';
 import { cn } from '@/lib/utils';
 import { Skeleton } from './ui/skeleton';
+
+interface FilterCarouselProps {
+    value?: string | undefined;
+    isLoading?: boolean;
+    onSelect: (value: string | null) => void;
+    data: {
+        value: string;
+        label: string;
+    }[];
+}
 
 const FilterCarousel = ({
     value,
@@ -49,7 +48,7 @@ const FilterCarousel = ({
             <div
                 className={cn(
                     'absolute left-12 top-0 bottom-0 w-12 h-12 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none',
-                    current === 1 && 'hidden',
+                    current === 1 && 'hidden'
                 )}
             />
             <Carousel
@@ -60,7 +59,7 @@ const FilterCarousel = ({
                 }}
                 className={cn(
                     'px-12 max-sm:hidden w-full py-1 mx-auto max-w-[calc(100vw-300px)]',
-                    !open && 'max-w-[calc(100vw-100px)]',
+                    !open && 'max-w-[calc(100vw-100px)]'
                 )}
             >
                 <CarouselContent className="-ml-3 max-w-full">
@@ -145,21 +144,21 @@ const FilterCarousel = ({
                     )}
 
                     {!isLoading &&
-                        data.map(({ value, label }) => (
+                        data.map((item) => (
                             <CarouselItem
-                                key={value}
+                                key={item.value}
                                 className="pl-3 basis-auto"
                             >
                                 <Badge
                                     variant={
-                                        value === undefined
+                                        value === item.value
                                             ? 'default'
                                             : 'secondary'
                                     }
                                     className="rounded-lg px-3 py-1 cursor-pointer whitespace-nowrap text-sm"
-                                    onClick={() => onSelect(value)}
+                                    onClick={() => onSelect(item.value)}
                                 >
-                                    {label}
+                                    {item.label}
                                 </Badge>
                             </CarouselItem>
                         ))}
