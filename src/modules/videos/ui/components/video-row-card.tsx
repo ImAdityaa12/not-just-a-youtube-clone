@@ -9,6 +9,8 @@ import { TooltipTrigger } from '@radix-ui/react-tooltip';
 import UserInfo from '../users/ui/components/user-info';
 import VideoMenu from './video-menu';
 import { useMemo } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { LIMIT } from '@/constant';
 
 const videoRowCardVariants = cva('group flex min-w-0', {
     variants: {
@@ -39,11 +41,43 @@ interface VideoRowCardProps extends VariantProps<typeof videoRowCardVariants> {
     onRemove?: () => void;
 }
 
-export const VideoRowCardSkeleton = () => {
-    return <div>VideoRowCardSkeleton</div>;
+export const VideoRowCardSkeleton = ({
+    size = 'default',
+}: VariantProps<typeof videoRowCardVariants>) => {
+    return (
+        <>
+            {Array.from({ length: LIMIT }).map((_, i) => (
+                <div className={videoRowCardVariants({ size })}>
+                    <div className={thumbnailVariants({ size })}>
+                        <Skeleton className="aspect-video" />
+                    </div>
+
+                    <div className="flex flex-col flex-1 min-w-0 gap-y-4">
+                        <div className="flex justify-between gap-x-2">
+                            <Skeleton className="h-10 w-4/5 md:w-5/6" />
+                        </div>
+
+                        <div className="flex items-center gap-x-2">
+                            <Skeleton className="h-8 w-8 rounded-full" />
+                            <Skeleton className="h-5 w-1/2 md:w-1/4" />
+                        </div>
+                        <Skeleton className="h-5 w-1/2 md:w-3/4" />
+                        <Skeleton className="h-5 w-1/2 md:w-3/4" />
+                        <Skeleton className="h-5 w-1/2 md:w-3/4" />
+                        <Skeleton className="h-5 w-1/2 md:w-3/4" />
+                    </div>
+                    <Skeleton className="h-10 w-10 rounded-full" />
+                </div>
+            ))}
+        </>
+    );
 };
 
-export const VideoRowCard = ({ data, onRemove, size }: VideoRowCardProps) => {
+export const VideoRowCard = ({
+    data,
+    onRemove,
+    size = 'default',
+}: VideoRowCardProps) => {
     const compactViews = useMemo(() => {
         return Intl.NumberFormat('en', {
             notation: 'compact',
@@ -98,10 +132,14 @@ export const VideoRowCard = ({ data, onRemove, size }: VideoRowCardProps) => {
                                         imageUrl={data.user.imageUrl}
                                         name={data.user.name}
                                     />
+                                    <UserInfo
+                                        size={'sm'}
+                                        name={data.user.name}
+                                    />
                                 </div>
                                 <Tooltip>
                                     <TooltipTrigger>
-                                        <p className="text-xs text-muted-foreground w-fit line-clamp-2">
+                                        <p className="text-xs text-muted-foreground w-fit line-clamp-2 text-start">
                                             {data.description ??
                                                 'No description'}
                                         </p>
