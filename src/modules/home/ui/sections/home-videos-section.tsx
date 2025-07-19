@@ -39,27 +39,15 @@ const HomeVideosSectionSkeleton = () => {
         <div className="gap-4 gap-y-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 [@media(min-width:1920px)]:grid-cols-5 [@media(min-width:2200px)]:grid-cols-6">
             {Array.from({ length: 12 }).map((_, i) => (
                 <div key={i} className="flex flex-col gap-2 w-full">
-                    {/* Video thumbnail skeleton */}
                     <Skeleton className="aspect-video w-full rounded-xl" />
-
-                    {/* Video info skeleton */}
                     <div className="flex gap-3">
-                        {/* Avatar skeleton */}
                         <Skeleton className="w-9 h-9 rounded-full shrink-0" />
-
                         <div className="min-w-0 flex-1 space-y-2">
-                            {/* Title skeleton */}
                             <Skeleton className="h-5 w-full" />
                             <Skeleton className="h-5 w-4/5" />
-
-                            {/* Channel name skeleton */}
                             <Skeleton className="h-4 w-2/3" />
-
-                            {/* Views and date skeleton */}
                             <Skeleton className="h-4 w-1/2" />
                         </div>
-
-                        {/* Menu button skeleton */}
                         <Skeleton className="w-6 h-6 rounded shrink-0" />
                     </div>
                 </div>
@@ -70,10 +58,7 @@ const HomeVideosSectionSkeleton = () => {
 
 const HomeVideosSection = ({ categoryId }: HomeVideosSectionProps) => {
     return (
-        <Suspense
-            fallback={<HomeVideosSectionSkeleton />}
-            key={`${categoryId}`}
-        >
+        <Suspense fallback={<HomeVideosSectionSkeleton />} key={categoryId}>
             <ErrorBoundary fallback={<div>Something went wrong</div>}>
                 <HomeVideosSectionSuspense categoryId={categoryId} />
             </ErrorBoundary>
