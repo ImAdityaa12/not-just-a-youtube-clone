@@ -11,7 +11,7 @@ const HomeNavbarSearch = () => {
 
     const searchParams = useSearchParams();
     const query = searchParams.get('query') || '';
-
+    const categoryId = searchParams.get('categoryId') || '';
     const [value, setValue] = useState(query);
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -20,7 +20,9 @@ const HomeNavbarSearch = () => {
         const newQuery = value.trim();
 
         url.searchParams.set('query', newQuery);
-
+        if (categoryId) {
+            url.searchParams.set('categoryId', categoryId);
+        }
         if (newQuery === '') {
             url.searchParams.delete('query');
         }
