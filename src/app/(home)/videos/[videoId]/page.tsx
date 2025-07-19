@@ -3,6 +3,8 @@ import { HydrateClient, trpc } from '@/trpc/server';
 import { LIMIT } from '@/constant';
 import React from 'react';
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
     params: Promise<{
         videoId: string;

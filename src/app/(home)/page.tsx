@@ -7,7 +7,9 @@ interface Pageprops {
         categoryId?: string;
     }>;
 }
+
 export const dynamic = 'force-dynamic';
+
 const page = async ({ searchParams }: Pageprops) => {
     const { categoryId } = await searchParams;
     void trpc.categories.getMany.prefetch();
