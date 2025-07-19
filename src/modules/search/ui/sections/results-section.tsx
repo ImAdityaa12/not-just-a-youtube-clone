@@ -19,7 +19,10 @@ interface ResultsViewProps {
 
 export const ResultsSection = ({ query, categoryId }: ResultsViewProps) => {
     return (
-        <Suspense fallback={<VideoRowCardSkeleton />}>
+        <Suspense
+            fallback={<VideoRowCardSkeleton />}
+            key={`${query}-${categoryId}`}
+        >
             <ErrorBoundary fallback={<div>Something went wrong</div>}>
                 <ResultsSectionSuspense query={query} categoryId={categoryId} />
             </ErrorBoundary>
