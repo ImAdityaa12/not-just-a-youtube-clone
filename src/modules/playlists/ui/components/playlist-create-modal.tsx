@@ -24,7 +24,7 @@ interface PlaylistCreateModalProps {
 
 const formSchema = z.object({
     name: z.string().min(1, {
-        message: 'Prompt is required',
+        message: 'Title is required',
     }),
 });
 
@@ -73,7 +73,7 @@ const PlaylistCreateModal = ({
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Prompt</FormLabel>
+                                <FormLabel>Title</FormLabel>
                                 <FormControl />
                                 <Input
                                     {...field}
