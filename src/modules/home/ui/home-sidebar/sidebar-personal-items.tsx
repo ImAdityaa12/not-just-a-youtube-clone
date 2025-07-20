@@ -18,13 +18,13 @@ const SidebarPersonalSection = () => {
     const items = [
         {
             title: 'History',
-            url: '/playlist/history',
+            url: '/playlists/history',
             icon: HistoryIcon,
             auth: true,
         },
         {
             title: 'Liked videos',
-            url: '/playlist/liked',
+            url: '/playlists/liked',
             icon: ThumbsUpIcon,
             auth: true,
         },
