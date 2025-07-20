@@ -25,7 +25,7 @@ const HistoryVideosSectionSuspense = () => {
                         <VideoGridCard data={video} key={video.id} />
                     ))}
             </div>
-            <div className="hidden flex-col gap-4 gap-y-10 md:flex">
+            <div className="hidden flex-col gap-4  md:flex">
                 {videos.pages
                     .flatMap((page) => page.items)
                     .map((video) => (
