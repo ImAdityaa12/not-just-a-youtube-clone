@@ -7,6 +7,7 @@ import { trpc } from '@/trpc/client';
 import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { LIMIT } from '@/constant';
+import { VideoRowCard } from '@/modules/videos/ui/components/video-row-card';
 
 const HistoryVideosSectionSuspense = () => {
     const [videos, query] = trpc.playlists.getHistory.useSuspenseInfiniteQuery(
@@ -17,11 +18,22 @@ const HistoryVideosSectionSuspense = () => {
     );
     return (
         <div>
-            <div className="flex flex-col gap-4 gap-y-10">
+            <div className="flex flex-col gap-4 gap-y-10 md:hidden">
                 {videos.pages
                     .flatMap((page) => page.items)
                     .map((video) => (
                         <VideoGridCard data={video} key={video.id} />
+                    ))}
+            </div>
+            <div className="hidden flex-col gap-4 gap-y-10 md:flex">
+                {videos.pages
+                    .flatMap((page) => page.items)
+                    .map((video) => (
+                        <VideoRowCard
+                            data={video}
+                            key={video.id}
+                            size={'compact'}
+                        />
                     ))}
             </div>
             <InfiniteScroll
