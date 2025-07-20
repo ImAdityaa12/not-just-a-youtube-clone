@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from '@/trpc/init';
 import {
+    playlistVideos,
     playlists,
     usersTable,
     videoViews,
@@ -13,6 +14,64 @@ import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
 
 export const playlistsRouter = createTRPCRouter({
+    getMany: protectedProcedure
+        .input(
+            z.object({
+                cursor: z
+                    .object({
+                        id: z.string().uuid(),
+                        updatedAt: z.date(),
+                    })
+                    .nullish(),
+                limit: z.number().min(1).max(100),
+            })
+        )
+        .query(async ({ input, ctx }) => {
+            const { id: userId } = ctx.user;
+            const { cursor, limit } = input;
+
+            const data = await db
+                .select({
+                    ...getTableColumns(playlists),
+                    videoCount: db.$count(
+                        playlistVideos,
+                        eq(playlistVideos.playlistId, playlists.id)
+                    ),
+                    user: usersTable,
+                })
+                .from(playlists)
+                .innerJoin(usersTable, eq(playlists.userId, usersTable.id))
+                .where(
+                    and(
+                        eq(playlists.userId, userId),
+                        cursor
+                            ? or(
+                                  lt(playlists.updatedAt, cursor.updatedAt),
+                                  and(
+                                      eq(playlists.updatedAt, cursor.updatedAt),
+                                      lt(playlists.id, cursor.id)
+                                  )
+                              )
+                            : undefined
+                    )
+                )
+                .orderBy(desc(playlists.updatedAt), desc(playlists.id))
+                .limit(limit + 1);
+            const hasMore = data.length > limit;
+            const items = hasMore ? data.slice(0, -1) : data;
+            const lastItem = items[items.length - 1];
+            const nextCursor = hasMore
+                ? {
+                      id: lastItem.id,
+                      updatedAt: lastItem.updatedAt,
+                  }
+                : null;
+
+            return {
+                items,
+                nextCursor,
+            };
+        }),
     create: protectedProcedure
         .input(
             z.object({
@@ -49,12 +108,11 @@ export const playlistsRouter = createTRPCRouter({
                     })
                     .nullish(),
                 limit: z.number().min(1).max(100),
-                categoryId: z.string().nullish(),
             })
         )
         .query(async ({ input, ctx }) => {
             const { id: userId } = ctx.user;
-            const { cursor, limit, categoryId } = input;
+            const { cursor, limit } = input;
 
             const viewerVideoReactions = db.$with('viewer_video_reactions').as(
                 db
@@ -105,9 +163,6 @@ export const playlistsRouter = createTRPCRouter({
                 .where(
                     and(
                         eq(videos.video_visibility, 'public'),
-                        categoryId
-                            ? eq(videos.categoryId, categoryId)
-                            : undefined,
                         cursor
                             ? or(
                                   lt(
@@ -155,12 +210,11 @@ export const playlistsRouter = createTRPCRouter({
                     })
                     .nullish(),
                 limit: z.number().min(1).max(100),
-                categoryId: z.string().nullish(),
             })
         )
         .query(async ({ input, ctx }) => {
             const { id: userId } = ctx.user;
-            const { cursor, limit, categoryId } = input;
+            const { cursor, limit } = input;
 
             const viewerVideoViews = db.$with('viewer_video_views').as(
                 db
@@ -206,9 +260,6 @@ export const playlistsRouter = createTRPCRouter({
                 .where(
                     and(
                         eq(videos.video_visibility, 'public'),
-                        categoryId
-                            ? eq(videos.categoryId, categoryId)
-                            : undefined,
                         cursor
                             ? or(
                                   lt(
