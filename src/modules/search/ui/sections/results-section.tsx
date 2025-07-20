@@ -2,7 +2,6 @@
 
 import InfiniteScroll from '@/components/infinite-scroll';
 import { LIMIT } from '@/constant';
-import { useIsMobile } from '@/hooks/use-mobile';
 import VideoGridCard from '@/modules/videos/ui/components/video-grid-card';
 import {
     VideoRowCard,
@@ -31,8 +30,6 @@ export const ResultsSection = ({ query, categoryId }: ResultsViewProps) => {
 };
 
 const ResultsSectionSuspense = ({ query, categoryId }: ResultsViewProps) => {
-    const isMobile = useIsMobile();
-
     const [results, resultQuery] = trpc.search.getMany.useSuspenseInfiniteQuery(
         { query, categoryId, limit: LIMIT },
         { getNextPageParam: (lastPage) => lastPage.nextCursor }
@@ -40,23 +37,21 @@ const ResultsSectionSuspense = ({ query, categoryId }: ResultsViewProps) => {
 
     return (
         <>
-            {isMobile ? (
-                <div className="flex flex-col gap-4">
-                    {results.pages
-                        .flatMap((page) => page.items)
-                        .map((video) => (
-                            <VideoGridCard data={video} key={video.id} />
-                        ))}
-                </div>
-            ) : (
-                <div className="flex flex-col gap-4">
-                    {results.pages
-                        .flatMap((page) => page.items)
-                        .map((video) => (
-                            <VideoRowCard data={video} key={video.id} />
-                        ))}
-                </div>
-            )}
+            <div className="flex flex-col gap-4 md:hidden">
+                {results.pages
+                    .flatMap((page) => page.items)
+                    .map((video) => (
+                        <VideoGridCard data={video} key={video.id} />
+                    ))}
+            </div>
+            <div className="hidden md:flex flex-col gap-4">
+                {results.pages
+                    .flatMap((page) => page.items)
+                    .map((video) => (
+                        <VideoRowCard data={video} key={video.id} />
+                    ))}
+            </div>
+
             <InfiniteScroll
                 hasNextPage={resultQuery.hasNextPage}
                 fetchNextPage={resultQuery.fetchNextPage}
