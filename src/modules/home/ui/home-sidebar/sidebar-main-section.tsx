@@ -9,10 +9,13 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { useAuth, useClerk } from '@clerk/nextjs';
+import { usePathname } from 'next/navigation';
 
 const SidebarMainSection = () => {
     const { isSignedIn } = useAuth();
     const clerk = useClerk();
+    const pathName = usePathname();
+
     const items = [
         {
             title: 'Home',
@@ -40,7 +43,7 @@ const SidebarMainSection = () => {
                             <SidebarMenuButton
                                 tooltip={item.title}
                                 asChild
-                                isActive={false}
+                                isActive={pathName === item.url}
                                 onClick={(e) => {
                                     if (item.auth && !isSignedIn) {
                                         e.preventDefault();
