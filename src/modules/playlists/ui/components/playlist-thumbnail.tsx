@@ -18,7 +18,7 @@ const PlaylistThumbnail = ({
     className,
 }: PlaylistThumbnailProps) => {
     return (
-        <div className={cn('relative pt-3 group', className)}>
+        <div className={cn('relative pt-3', className)}>
             <div className="relative">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-[97%] overflow-hidden rounded-xl bg-black/20 aspect-video" />
                 <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-[98.5%] overflow-hidden rounded-xl bg-black/25 aspect-video" />
