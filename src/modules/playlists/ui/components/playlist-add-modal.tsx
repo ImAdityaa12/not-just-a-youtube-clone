@@ -6,6 +6,7 @@ import { LIMIT } from '@/constant';
 import { Loader2Icon, SquareCheckIcon, SquareIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import InfiniteScroll from '@/components/infinite-scroll';
+import { toast } from 'sonner';
 
 interface PlaylistAddModalProps {
     open: boolean;
@@ -36,6 +37,31 @@ const PlaylistAddModal = ({
         }
     );
 
+    const addVideo = trpc.playlists.addVideo.useMutation({
+        onSuccess: () => {
+            utils.playlists.getManyForVideo.invalidate({
+                videoId: videoId,
+            });
+            utils.playlists.getMany.invalidate();
+            toast.success('Video added to playlist');
+        },
+        onError: () => {
+            toast.error('Something went wrong');
+        },
+    });
+    const removeVideo = trpc.playlists.removeVideo.useMutation({
+        onSuccess: () => {
+            utils.playlists.getManyForVideo.invalidate({
+                videoId: videoId,
+            });
+            utils.playlists.getMany.invalidate();
+            toast.success('Video Removed from the playlist');
+        },
+        onError: () => {
+            toast.error('Something went wrong');
+        },
+    });
+
     return (
         <ResponsiveDialog
             title="Add to playlist"
@@ -57,6 +83,19 @@ const PlaylistAddModal = ({
                                 variant={'ghost'}
                                 className="w-full justify-start px-2 [&_svg]:size-5"
                                 size={'lg'}
+                                onClick={() => {
+                                    if(playlist.containsVideo){
+                                        removeVideo.mutate({
+                                            playlistId: playlist.id,
+                                            videoId: videoId
+                                        })
+                                    }else{
+                                        addVideo.mutate({
+                                            playlistId: playlist.id,
+                                            videoId: videoId,
+                                        })
+                                    }
+                                }}
                             >
                                 {playlist.containsVideo ? (
                                     <SquareCheckIcon className="mr-2" />
