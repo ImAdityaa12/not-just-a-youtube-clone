@@ -7,10 +7,20 @@ import { Trash2Icon } from 'lucide-react';
 import { trpc } from '@/trpc/client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface PlaylistHeaderSection {
     playlistId: string;
 }
+
+const PlaylistHeaderSectionSkeleton = () => {
+    return (
+        <div className="flex flex-col gap-y-2">
+            <Skeleton className="h-6 w-24" />
+            <Skeleton className="h-4 w-32" />
+        </div>
+    );
+};
 
 const PlaylistSectionSuspense = ({ playlistId }: PlaylistHeaderSection) => {
     const router = useRouter();
@@ -57,7 +67,7 @@ const PlaylistSectionSuspense = ({ playlistId }: PlaylistHeaderSection) => {
 
 const PlaylistHeaderSection = ({ playlistId }: PlaylistHeaderSection) => {
     return (
-        <Suspense>
+        <Suspense fallback={<PlaylistHeaderSectionSkeleton />}>
             <ErrorBoundary fallback={<div>Something went wrong</div>}>
                 <PlaylistSectionSuspense playlistId={playlistId} />
             </ErrorBoundary>
