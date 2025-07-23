@@ -15,14 +15,22 @@ import { TRPCError } from '@trpc/server';
 
 export const playlistsRouter = createTRPCRouter({
     remove: protectedProcedure
-        .input(z.string().uuid())
+        .input(
+            z.object({
+                playlistId: z.string().uuid(),
+            })
+        )
         .mutation(async ({ input, ctx }) => {
             const { id: userId } = ctx.user;
+            const { playlistId } = input;
             const [existingPlaylist] = await db
                 .select()
                 .from(playlists)
                 .where(
-                    and(eq(playlists.id, input), eq(playlists.userId, userId))
+                    and(
+                        eq(playlists.id, playlistId),
+                        eq(playlists.userId, userId)
+                    )
                 );
             if (!existingPlaylist) {
                 throw new TRPCError({
@@ -30,18 +38,26 @@ export const playlistsRouter = createTRPCRouter({
                     message: 'Playlist not found',
                 });
             }
-            await db.delete(playlists).where(eq(playlists.id, input));
+            await db.delete(playlists).where(eq(playlists.id, playlistId));
             return existingPlaylist;
         }),
     getOne: protectedProcedure
-        .input(z.string().uuid())
+        .input(
+            z.object({
+                playlistId: z.string().uuid(),
+            })
+        )
         .query(async ({ input, ctx }) => {
             const { id: userId } = ctx.user;
+            const { playlistId } = input;
             const [existingPlaylist] = await db
                 .select()
                 .from(playlists)
                 .where(
-                    and(eq(playlists.id, input), eq(playlists.userId, userId))
+                    and(
+                        eq(playlists.id, playlistId),
+                        eq(playlists.userId, userId)
+                    )
                 );
             if (!existingPlaylist) {
                 throw new TRPCError({

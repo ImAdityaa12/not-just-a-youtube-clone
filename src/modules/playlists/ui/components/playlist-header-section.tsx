@@ -1,22 +1,46 @@
+'use client';
+
 import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Button } from '@/components/ui/button';
 import { Trash2Icon } from 'lucide-react';
+import { trpc } from '@/trpc/client';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface PlaylistHeaderSection {
     playlistId: string;
 }
 
 const PlaylistSectionSuspense = ({ playlistId }: PlaylistHeaderSection) => {
+    const router = useRouter();
+    const [playlist] = trpc.playlists.getOne.useSuspenseQuery({
+        playlistId,
+    });
+    const remove = trpc.playlists.remove.useMutation({
+        onSuccess: () => {
+            toast.success('Playlist removed successfully');
+            router.push('/playlists');
+        },
+    });
     return (
         <div className="flex justify-between items-center">
             <div>
-                <h1 className="text-2xl font-bold">History</h1>
+                <h1 className="text-2xl font-bold">{playlist.name}</h1>
                 <p className="text-xs text-muted-foreground">
                     Videos from the playlist
                 </p>
             </div>
-            <Button variant={'outline'} size={'icon'} className="rounded-full">
+            <Button
+                variant={'outline'}
+                size={'icon'}
+                className="rounded-full"
+                onClick={() => {
+                    remove.mutate({
+                        playlistId,
+                    });
+                }}
+            >
                 <Trash2Icon />
             </Button>
         </div>
