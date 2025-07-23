@@ -38,11 +38,17 @@ const PlaylistAddModal = ({
     );
 
     const addVideo = trpc.playlists.addVideo.useMutation({
-        onSuccess: () => {
+        onSuccess: (data) => {
             utils.playlists.getManyForVideo.invalidate({
                 videoId: videoId,
             });
             utils.playlists.getMany.invalidate();
+            utils.playlists.getOne.invalidate({
+                playlistId: data.playlistId,
+            });
+            utils.playlists.getPlaylistVideos.invalidate({
+                playlistId: data.playlistId,
+            });
             toast.success('Video added to playlist');
         },
         onError: () => {
@@ -50,11 +56,17 @@ const PlaylistAddModal = ({
         },
     });
     const removeVideo = trpc.playlists.removeVideo.useMutation({
-        onSuccess: () => {
+        onSuccess: (data) => {
             utils.playlists.getManyForVideo.invalidate({
                 videoId: videoId,
             });
             utils.playlists.getMany.invalidate();
+            utils.playlists.getOne.invalidate({
+                playlistId: data.playlistId,
+            });
+            utils.playlists.getPlaylistVideos.invalidate({
+                playlistId: data.playlistId,
+            });
             toast.success('Video Removed from the playlist');
         },
         onError: () => {
@@ -84,16 +96,16 @@ const PlaylistAddModal = ({
                                 className="w-full justify-start px-2 [&_svg]:size-5"
                                 size={'lg'}
                                 onClick={() => {
-                                    if(playlist.containsVideo){
+                                    if (playlist.containsVideo) {
                                         removeVideo.mutate({
                                             playlistId: playlist.id,
-                                            videoId: videoId
-                                        })
-                                    }else{
+                                            videoId: videoId,
+                                        });
+                                    } else {
                                         addVideo.mutate({
                                             playlistId: playlist.id,
                                             videoId: videoId,
-                                        })
+                                        });
                                     }
                                 }}
                             >

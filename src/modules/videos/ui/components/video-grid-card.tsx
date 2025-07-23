@@ -20,7 +20,7 @@ const VideoGridCard = ({ data, onRemoved }: VideoGridCardProps) => {
                     previewUrl={data.preview_url}
                 />
             </Link>
-            <VideoInfo data={data} />
+            <VideoInfo data={data} onRemove={onRemoved} />
         </div>
     );
 };

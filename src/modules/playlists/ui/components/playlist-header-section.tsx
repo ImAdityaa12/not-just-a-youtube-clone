@@ -28,18 +28,19 @@ const PlaylistSectionSuspense = ({ playlistId }: PlaylistHeaderSection) => {
     const [playlist] = trpc.playlists.getOne.useSuspenseQuery({
         playlistId,
     });
-    const remove = trpc.playlists.remove.useMutation({
+    const removePlaylist = trpc.playlists.remove.useMutation({
         onSuccess: () => {
             toast.success('Playlist removed successfully');
             utils.playlists.getOne.invalidate({
                 playlistId,
             });
-            router.push('/playlists');
+            utils.playlists.getMany.invalidate();
         },
         onError: () => {
             toast.error('Something went wrong');
         },
     });
+
     return (
         <div className="flex justify-between items-center">
             <div>
@@ -52,9 +53,9 @@ const PlaylistSectionSuspense = ({ playlistId }: PlaylistHeaderSection) => {
                 variant={'outline'}
                 size={'icon'}
                 className="rounded-full"
-                disabled={remove.isPending}
+                disabled={removePlaylist.isPending}
                 onClick={() => {
-                    remove.mutate({
+                    removePlaylist.mutate({
                         playlistId,
                     });
                 }}

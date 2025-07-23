@@ -8,6 +8,7 @@ import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { LIMIT } from '@/constant';
 import { VideoRowCard } from '@/modules/videos/ui/components/video-row-card';
+import { toast } from 'sonner';
 
 interface PlaylistVideosSectionProps {
     playlistId: string;
@@ -16,6 +17,8 @@ interface PlaylistVideosSectionProps {
 const PlaylistVideosSectionSuspense = ({
     playlistId,
 }: PlaylistVideosSectionProps) => {
+    const utils = trpc.useUtils();
+
     const [videos, query] =
         trpc.playlists.getPlaylistVideos.useSuspenseInfiniteQuery(
             { limit: LIMIT, playlistId },
@@ -23,14 +26,41 @@ const PlaylistVideosSectionSuspense = ({
                 getNextPageParam: (lastPage) => lastPage.nextCursor,
             }
         );
-    console.log(videos);
+
+    const remove = trpc.playlists.removeVideo.useMutation({
+        onSuccess: (data) => {
+            toast.success('Playlist removed successfully');
+            utils.playlists.getOne.invalidate({
+                playlistId,
+            });
+            utils.playlists.getManyForVideo.invalidate({
+                videoId: data.videoId,
+            });
+            utils.playlists.getMany.invalidate();
+            utils.playlists.getPlaylistVideos.invalidate({
+                playlistId,
+            });
+        },
+        onError: () => {
+            toast.error('Something went wrong');
+        },
+    });
     return (
         <div>
             <div className="flex flex-col gap-4 gap-y-10 md:hidden">
                 {videos.pages
                     .flatMap((page) => page.items)
                     .map((video) => (
-                        <VideoGridCard data={video} key={video.id} />
+                        <VideoGridCard
+                            data={video}
+                            key={video.id}
+                            onRemoved={() => {
+                                remove.mutate({
+                                    playlistId,
+                                    videoId: video.id,
+                                });
+                            }}
+                        />
                     ))}
             </div>
             <div className="hidden flex-col gap-4  md:flex">
@@ -41,6 +71,12 @@ const PlaylistVideosSectionSuspense = ({
                             data={video}
                             key={video.id}
                             size={'compact'}
+                            onRemove={() => {
+                                remove.mutate({
+                                    playlistId,
+                                    videoId: video.id,
+                                });
+                            }}
                         />
                     ))}
             </div>
