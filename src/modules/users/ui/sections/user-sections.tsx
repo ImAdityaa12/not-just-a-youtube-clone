@@ -11,7 +11,7 @@ interface UserSectionProps {
 }
 
 export const UserPageSectionSkeleton = () => {
-    return <Skeleton className="w-full max-h-[200px] h-[15vh] md:[25vh]" />;
+    return <Skeleton className="w-full max-h-[200px] h-[25vh]" />;
 };
 
 export const UserPageInfoSkeleton = () => {
