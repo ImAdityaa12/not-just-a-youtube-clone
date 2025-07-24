@@ -16,7 +16,7 @@ const UserPageInfo = ({ user }: UserPageInfoProps) => {
     const clerk = useClerk();
     const { isPending, onClick } = useSubscription({
         isSubscribed: user.viewerSubscribed,
-        userId: user.clerkId,
+        userId: user.id,
     });
     return (
         <div className="py-8">

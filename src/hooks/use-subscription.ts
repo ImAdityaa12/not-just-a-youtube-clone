@@ -1,5 +1,6 @@
 import { trpc } from '@/trpc/client';
 import { useClerk } from '@clerk/nextjs';
+import { error } from 'console';
 import { toast } from 'sonner';
 
 interface UseSubscriptionProps {
@@ -20,7 +21,7 @@ export const useSubscription = ({
         onSuccess: () => {
             toast.success('Subscribed');
             utils.subscriptions.getManySubscribed.invalidate();
-
+            utils.users.getOne.invalidate({ id: userId });
             if (fromVideoId) {
                 utils.videos.getOne.invalidate({ id: fromVideoId });
             }
@@ -37,7 +38,7 @@ export const useSubscription = ({
         onSuccess: () => {
             toast.success('Unsubscribed');
             utils.subscriptions.getManySubscribed.invalidate();
-
+            utils.users.getOne.invalidate({ id: userId });
             if (fromVideoId) {
                 utils.videos.getOne.invalidate({ id: fromVideoId });
             }
