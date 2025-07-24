@@ -6,6 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import UserPageBanner from '../components/user-page-banner';
 import { Skeleton } from '@/components/ui/skeleton';
 import UserPageInfo from '../components/user-page-info';
+import { Separator } from '@/components/ui/separator';
 interface UserSectionProps {
     userId: string;
 }
@@ -59,6 +60,7 @@ const UserSectionSuspense = ({ userId }: UserSectionProps) => {
         <div className="flex flex-col">
             <UserPageBanner user={user} />
             <UserPageInfo user={user} />
+            <Separator />
         </div>
     );
 };
