@@ -48,8 +48,9 @@ const SidebarPersonalSection = () => {
                                 tooltip={item.title}
                                 asChild
                                 isActive={pathName === item.url}
-                                onClick={() => {
+                                onClick={(e) => {
                                     if (item.auth && !isSignedIn) {
+                                        e.preventDefault();
                                         return clerk.openSignIn();
                                     }
                                 }}
