@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import Link from 'next/link';
-import HomeNavbarSearch from './navbar-search';
+import HomeNavbarSearch from './search-input';
 import AuthButton from '@/modules/auth/ui/components/auth-button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
