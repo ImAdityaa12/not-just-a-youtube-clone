@@ -1,6 +1,4 @@
-import HomeVideosSection from '../sections/home-videos-section';
 import SubscriptionsVideosSection from '../sections/subscriptions-videos-section';
-import TrendingVideosSection from '../sections/trending-videos-section';
 
 export const SubscriptionView = () => {
     return (

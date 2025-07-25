@@ -21,7 +21,7 @@ export const VideoThumbnail = ({
                     src={thumbnailUrl ?? FALLBACK_THUMBNAIL}
                     fill
                     className="size-full object-cover group-hover:opacity-0 "
-                    alt="Video Thumbnail"
+                    alt={title ?? 'Video Thumbnail'}
                 />
                 <Image
                     unoptimized={!!previewUrl}

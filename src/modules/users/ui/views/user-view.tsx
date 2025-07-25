@@ -1,7 +1,5 @@
 import React from 'react';
 import UserSection from '../sections/user-sections';
-import { trpc } from '@/trpc/client';
-import { LIMIT } from '@/constant';
 import VideosSection from '../sections/videos-section';
 
 interface UserViewProps {

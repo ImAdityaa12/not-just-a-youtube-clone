@@ -45,7 +45,7 @@ const VideoInfo = ({ data, onRemove }: VideoInfoProps) => {
                 </Link>
             </div>
             <div className="flex-shrik-0">
-                <VideoMenu videoId={data.id} />
+                <VideoMenu videoId={data.id} onRemove={onRemove} />
             </div>
         </div>
     );

@@ -1,7 +1,6 @@
 'use client';
 
 import InfiniteScroll from '@/components/infinite-scroll';
-import { Skeleton } from '@/components/ui/skeleton';
 import { trpc } from '@/trpc/client';
 import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';

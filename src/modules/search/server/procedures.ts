@@ -1,8 +1,4 @@
-import {
-    baseProcedure,
-    createTRPCRouter,
-    protectedProcedure,
-} from '@/trpc/init';
+import { baseProcedure, createTRPCRouter } from '@/trpc/init';
 import { z } from 'zod';
 import { usersTable, videos, videosReactions, videoViews } from '@/db/schema';
 import { db } from '@/db';
