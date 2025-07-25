@@ -11,7 +11,7 @@ const StudioNavbar = () => {
             <div className="flex items-center gap-4 w-full">
                 <div className="flex items-center flex-shrink-0 gap-4">
                     <SidebarTrigger />
-                    <Link href={'/studio'} className="hidden md:block">
+                    <Link prefetch href={'/studio'} className="hidden md:block">
                         <div className="flex items-center gap-1">
                             <Image
                                 src="/logo.svg"

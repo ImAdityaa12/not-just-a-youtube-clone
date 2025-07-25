@@ -12,7 +12,7 @@ interface VideoGridCardProps {
 const VideoGridCard = ({ data, onRemoved }: VideoGridCardProps) => {
     return (
         <div className="flex flex-col gap-2 w-full group">
-            <Link href={`/videos/${data.id}`}>
+            <Link prefetch href={`/videos/${data.id}`}>
                 <VideoThumbnail
                     thumbnailUrl={data.thumbnail_url}
                     title={data.title}

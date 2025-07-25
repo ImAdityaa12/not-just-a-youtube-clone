@@ -58,6 +58,7 @@ const SubscriptionSection = () => {
                                     asChild
                                 >
                                     <Link
+                                        prefetch
                                         href={`/users/${item.creatorId}`}
                                         className="flex items-center gap-4"
                                     >
@@ -79,6 +80,7 @@ const SubscriptionSection = () => {
                             isActive={pathName === '/subscriptions'}
                         >
                             <Link
+                                prefetch
                                 href="/subscriptions"
                                 className="flex items-center gap-4"
                             >
