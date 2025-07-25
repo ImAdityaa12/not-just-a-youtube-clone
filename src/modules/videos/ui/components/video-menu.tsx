@@ -38,6 +38,7 @@ const VideoMenu = ({
         try {
             await navigator.clipboard.writeText(fullUrl);
             toast.success('Linked copied to clipboard');
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             toast.error('Failed to copy link to clipboard');
         }

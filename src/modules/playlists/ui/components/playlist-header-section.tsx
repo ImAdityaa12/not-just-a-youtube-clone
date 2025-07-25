@@ -5,7 +5,6 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { Button } from '@/components/ui/button';
 import { Trash2Icon } from 'lucide-react';
 import { trpc } from '@/trpc/client';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -23,7 +22,6 @@ const PlaylistHeaderSectionSkeleton = () => {
 };
 
 const PlaylistSectionSuspense = ({ playlistId }: PlaylistHeaderSection) => {
-    const router = useRouter();
     const utils = trpc.useUtils();
     const [playlist] = trpc.playlists.getOne.useSuspenseQuery({
         playlistId,
