@@ -2,6 +2,7 @@ import { Sidebar, SidebarContent } from '@/components/ui/sidebar';
 import SidebarMainSection from './sidebar-main-section';
 import { Separator } from '@/components/ui/separator';
 import SidebarPersonalSection from './sidebar-personal-items';
+import SubscriptionSection from './subscription-section';
 export const HomeSidebar = () => {
     return (
         <Sidebar className="top-16 z-40 border-none" collapsible="icon">
@@ -9,6 +10,7 @@ export const HomeSidebar = () => {
                 <SidebarMainSection />
                 <Separator />
                 <SidebarPersonalSection />
+                <SubscriptionSection />
             </SidebarContent>
         </Sidebar>
     );

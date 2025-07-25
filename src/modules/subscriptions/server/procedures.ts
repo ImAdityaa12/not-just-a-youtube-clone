@@ -21,8 +21,7 @@ export const subscriptionsRouter = createTRPCRouter({
                         updatedAt: z.date(),
                     })
                     .nullish(),
-                limit: z.number().min(1).max(100),
-               
+                limit: z.number().min(1).max(100), 
             })
         )
         .query(async ({ input, ctx }) => {
@@ -63,7 +62,7 @@ export const subscriptionsRouter = createTRPCRouter({
             const lastItem = items[items.length - 1];
             const nextCursor = hasMore
                 ? {
-                      id: lastItem.creatorId,
+                      creatorId: lastItem.creatorId,
                       updatedAt: lastItem.updatedAt,
                   }
                 : null;
