@@ -25,6 +25,7 @@ export const useSubscription = ({
             if (fromVideoId) {
                 utils.videos.getOne.invalidate({ id: fromVideoId });
             }
+            utils.subscriptions.getMany.invalidate();
         },
         onError: (error) => {
             if (error.data?.code === 'UNAUTHORIZED') {
@@ -39,6 +40,7 @@ export const useSubscription = ({
             toast.success('Unsubscribed');
             utils.subscriptions.getManySubscribed.invalidate();
             utils.users.getOne.invalidate({ id: userId });
+            utils.subscriptions.getMany.invalidate();
             if (fromVideoId) {
                 utils.videos.getOne.invalidate({ id: fromVideoId });
             }
