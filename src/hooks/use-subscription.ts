@@ -1,6 +1,5 @@
 import { trpc } from '@/trpc/client';
 import { useClerk } from '@clerk/nextjs';
-import { error } from 'console';
 import { toast } from 'sonner';
 
 interface UseSubscriptionProps {
